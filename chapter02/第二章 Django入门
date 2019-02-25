@@ -1,0 +1,48 @@
+Django是在BSD许可证下的开源项目
+Django版本:
+1.长时间支持版本(Long Term Support, LTS)
+2.最新版本,正式发布的稳定版本
+3.预览版(一般版本号中带a1,a2,b1,b2的标识),主要为愿意尝试新功能的用户使用
+2.1.1 Windows安装Django
+    Django官方网站:https://www.djangoproject.com/
+    Python官方仓库下载:https://pypi.python.org/pypi/Django
+    Django是更新非常频繁的框架,
+注:可选择豆瓣源
+2.1.2 Ubuntu安装Django
+    Ubuntu自带python2和python3
+2.2 开始第一个demo
+    2.2.1 创建项目与应用
+        安装Django后,在../python/Scripts/目录中会多出一个django-admin.exe文件.在Windows命令提示符下输入
+            django-admin
+        命令回车,会罗列出Django提供的命令,其中使用"startproject"命令来创建项目
+            django-admin startproject guest # 创建guest项目
+        项目结构:
+            guest/
+                guest/
+                    __init__.py # 一个空文件,用它来标识一个目录为python的标准包
+                    settings.py # Django项目的配置文件,包括Django模块应用配置,数据库配置,模板配置等
+                    urls.py # Django项目的URL声明
+                    wsgi.py # 为WSGI兼容的Web服务器服务项目的切入点
+                manage.py # 一个命令行工具,可以让你在使用Django项目时以不同的方式进行交互
+        manage.py所提供的许多命令与django-admin相同.
+        Django官方文档:https://docs.djangoproject.com/en/1.10/ref/django-admin/
+        使用"startapp"命令创建应用.一个项目可以包含多个应用,而我们要开发的签到系统应该在具体应用下面完成
+            python manage.py startapp sign # 创建sign项目
+        sign应用的目录
+            migrations/ # 用于记录models中数据的变更
+            admin.py # 映射models中的数据到Django自带的admin后台
+            apps.py # 在新的Django版本中新增,用于应用程序的配置
+            models.py # 创建应用程序数据表模型(对应数据库的相关操作)
+            tests.py # 创建Django测试
+            views.py # 控制向前端显示哪些数据
+    2.2.2 运行项目
+        Django提供了Web容器,只需要通过"runserver"命令就可以把项目运行起来
+            python manage.py runserver
+        Django默认会通过本机的8000端口来启动项目,可以指定IP地址和端口号
+            python manage.py runserver 127.0.0.1:8001
+    2.2.3 Hello Django!
+        开发一个"Hello Django!"页面
+        配置guest/settings.py文件,将sign应用添加到项目中
+
+
+
