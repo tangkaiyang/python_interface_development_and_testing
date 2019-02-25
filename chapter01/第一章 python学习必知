@@ -1,0 +1,36 @@
+1)pip安装拓展库
+pip install django
+Django为python下面开发web项目非常强大的一个库,本书重点
+2)使用pip安装指定版本的扩展库
+pip install django==1.9.7
+默认安装最新版本
+3)使用pip查看当前安装的库
+pip show django
+不同的库显示的信息有所不同,有些库会显示当前的版本号,以及它安装路径等
+4)使用pip卸载库
+pip uninstall django
+5)区分python2与python3的pip
+pip是可执行文件,文件名可随意修改,修改为pip2.exe与pip3.exe即可使用pip2与pip3使用
+    1.3.2 tar.gz文件安装
+    不是多有的库都支持pip命令安装.个别库可能只提供了压缩包文件
+    下载相应的tar.gz文件,解压后进入解压目录,通过python命令安装
+    python setup.py install
+    1.3.3 whl文件安装
+    wheel本质上是一个zip包格式,它使用.whl扩展名,用于python模块的安装
+    先下载相应的安装包,使用pip安装
+    pip install 相应的文件名
+1.4python开发工具
+    python IDLE
+    Sublime Text3 支持多种编程语言.许多强大的快捷键,支持丰富的插件扩展.如果平时需要在不同编程语言切换,将是一个不错的选择
+    pycharm
+    Atom
+1.5python报错
+    1.5.1 缩进错误
+    1.5.2 引包错误
+    1.5.3 编码错误
+        python程序文件的编码
+            开头加#coding=utf-8或#coding=gbk来使程序同一为UTF-8或GBK编码
+        python程序运行时环境(IDE)的编码
+            不确定是否是IDE的编码问题,切换回Python IDLE执行程序
+
+
