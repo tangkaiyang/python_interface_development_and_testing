@@ -1,0 +1,45 @@
+需求驱动学习
+Django开发一个发布会签到系统
+开发一个用户登录功能
+3.1 写登录
+    修改index.html文件,
+    index.html
+        <html>
+            <head>
+                <title>Django Page</title>
+            </head>
+            <body>
+                <h1>发布会管理</h1>
+                <form>
+                    <input name="username" type="text" placeholder="username"><br>
+                    <input name="password" type="text" placeholder="password"><br>
+                    <button id="btm" type="submint">登录</button>
+            </form>
+            </body>
+        </html>
+        注:placeholder 占位符
+    启动Django服务,访问:http://127.0.0.1:8000/index/
+    目前并不可用.要真正实现登录还需要思考一些问题.
+    当输入用户名密码并点击"登录"按钮之后,表单(form)中的数据要以什么方式(GET/POST)提交系统?
+    系统如何验证得到的用户名密码?如果验证成功应该跳转到什么页面?如果验证失败如何将错误提示返回给用户?
+    3.1.1 GET与POST请求
+        当客户机通过HTTP协议向服务器提交请求时,最常用到的方法是GET和POST
+        GET - 从指定的资源请求数据
+        POST - 向指定的资源提交要被处理的数据
+
+        GET请求
+        GET方法如何传参数,给from添加属性method="get"
+            修改index.html文件
+            ...
+                <form method="get">
+            ...
+        保存index.html文件,重新刷新页面.输入用户名,密码,点击登录
+        浏览器URL地址栏显示:
+            http://127.0.0.1:8000/index/?username=admin&password=admin123
+        GET方法会将用户提交的数据添加到URL地址中,路径后面跟?,username和password为HTML代码中的<input>标签的
+        name属性值,username=admin表示用户名输入得到的输入数据为admin.passwrod=admin123密码输入框得到的输入
+        数据为"admin123".多个参数之间用&符号隔开
+
+        POST请求
+        将上面的get改为post即method="post"
+

@@ -43,6 +43,93 @@ Django版本:
     2.2.3 Hello Django!
         开发一个"Hello Django!"页面
         配置guest/settings.py文件,将sign应用添加到项目中
+            settings.py
+                ......
+                # Application definition
+                INSTALLED_APPS = [
+                    .....
+                    'sign', # 添加sign应用
+                ]
+                ...
+        显示"Hello Django!"的路径.
+        命名一个/index/路径,访问http://127.0.0.1:8000/index/报404
+        Django在项目中的guest子目录下通过urls.py文件来定义URLconf,
+        但是,在urls.py文件中只找到了一个admin/的路由设置,index/没有匹配到,
+        打开guest/urls.py文件添加该目录
+            在urls.py的urlpatterns列表中添加index/路径配置
+        项目启动时报错,提示在views.py文件中没有index属性
+        接下来在../sign/views.py文件创建index函数
+    2.2.4 使用模板
+        用HTML页面来替代"Hello Django!"字符串,处理方式有多不同,可以认为这是一次重构
+        在应用sign/目录下创建templates/index.html文件
+    需注意该HTML文件的所在路径,不要弄错
+        修改views.py
+            return render(request, "index.html")
+        这里抛弃HttpResponse类,转而使用Django的render(渲染器)函数.该函数的第一个参数是请求对象的,第二个参数返回一个index.html
+        页面
+2.3 Django工作流
+    http://127.0.0.1:8000/index/ ====>> urls.py
+        hello django                    urlpatterns = [url(r'^index/$', views.index),]
+            /\                              ||
+            ||                              \/
+    index.html      <<=========    sign/views.py
+        ....                        def index(request):
+                                        return render(request, "index.html")
+    需要说明的是,这并非Django的完整处理流程,其中最主要的就是缺失了数据层(model)的操作,目前未涉及到
+    2.3.1 URL组成
+        http://127.0.0.1:8000/index/
+        URL地址由以下几部分组成
+        协议类型: HTTP/HTTPS
+        HTTP协议(HyperText Transfer Protocol,超文本传输协议)是用于从WWW服务器传输超文本到本地浏览器的传送协议.它可以是浏览器
+        更加高效,使网络传输减少.不仅保证计算机正确快速地传输超文本文档,还确定传输文档中的哪一部分,以及那些内容首先显示等
+        HTTPS(全程:Hyper Text Transfer Protocol over Secure Socket Layer),是以安全目标的HTTP通道,是HTTP的安全版
+        主机地址:itest.info, 127.0.0.1
+        itest.info为一个网址,网址通过域名解析服务器会找到对应的IP主机
+        127.0.0.1为一个IP地址,该IP地址指向本机
+        端口号:8000
+        一台主机上有很多应用,不同应用占用不同的端口号,除了要制定主机(网址或IP地址)之外,还有进一步制定相应的端口号才能访问到具体
+        的应用.
+        前面在运行Django服务器,默认使用8000的端口号,多有,在浏览器除了输入IP地址之后,还要指向端口号,才能访问到Django应用
+        路径:/index/, /admin
+        一般用来表示主机上的一个目录或文件地址
+    2.3.2 urls的配置
+        当Django拿到浏览器URL的地址之后,取端口号后面的路径"/index", "/admin".然后在urls.py文件中匹配
+            url(r'^index/$', views.index)
+        通过^index/$匹配到/index/目录,并且将处理指向sign应用的视图文件views.py的index函数
+    2.3.3 views视图
+        接下来的处理就到了../sign/views.py中的index视图函数
+            def index(request):
+                return render(request, "index.html")
+        视图在Django中非常重要,是链接页面与数据的中间纽带.拿登录的例子来讲,用户在页面上输入了用户名和密码然后登录,那么request请
+        求会由视图来接收,如何提取出用户名和密码的数据,如何用这些数据去查询数据库,再如何将登陆成功的页面返回给用户,这些全部由视图
+        层来完成.
+    2.3.4 templates模板(template即模板)
+        打开../sign/templates/index.html文件
+        模板的载体就是我们所熟悉的Web页面,Django自带的有模板语言.它的主要作用是如何展示数据,比如视图层返回的是一个字符串,要如何
+        显示在页面上;返回的对象数组要如何显示等.当然,为了是页面更漂亮需要借助前端技术,比如CSS,JavaScript等
+2.4 MTV开发模式
+    Django的开发模式
+    MTV开发模式
+    Django数据驱动Web应用的总体设计.Django的设计鼓励送耦合及对应用程序中不同部分的严格分割.要想修改应用的某部分而不影响其他部分
+    就比较容易了.在视图函数中,通过模板系统把业务逻辑和表现逻辑分隔开的重要性.在数据库层中,我们对数据访问逻辑也应用了同样的理念,
+    把数据存取逻辑,业务逻辑和表现逻辑组合在一起的概念有时被称为软件架构的Model-View-Controller(MVC)模式.在这个模式中,Model代表
+    数据存取层,View代表的是系统中选择显示什么和怎么显示的部分,Controller指的是系统中根据用户输入并视需要访问模型,以决定使用哪个
+    视图的那部分.
+    像MVC这样的明确定义模式注意用于改善开发人员之间的沟通.比起告诉同事,"让我们采用抽象的数据存取方式,然后单独
+    划分一层来显示数据,并且在中间加上一个控制它的层",一个通用的说法会让你受益,你只需要说"我们在这里使用MVC模式吧
+    ".Django紧紧地遵循这种MVC模式,可以称得上是一种MVC框架,以下是Django中MVC各自的含义
+        M,数据存取部分,有Django数据库层处理,
+        V,选择显示哪些数据要显示以及怎样显示的部分,由视图和模板处理
+        C,根据用户输入委派视图的部分,由Django框架分局URLconf设置,对给定URL调用适当的python函数
+    由于C由框架自行处理,而Django里更关注的是模型(Model),模板(Template)和视图(Views),Django也被称为MTV框架.在MTV
+    开发模式中:
+        M代表模型(Model),即数据存取层.该层处理与数据相关的所有事物:如何存取,如何验证有效
+        T代表模板(Template),即表现层.该层处理与表现相关的决定:如何在页面或其他类型文档中进行显示.
+        V代表视图(View),即业务逻辑层.该层包含存取模型及调取恰当模板的相关逻辑.你可以把它看做模型与模板之间的桥梁
+    在Django对MVC的诠释中,视图用来描述要展现给用户的数据,不是数据如何展示,而且展现那些数据..相比之下,Ruby on Rails及一些同类框
+    架提倡控制器赋值决定向用户展现哪些数据,而视图则仅决定如何展现数据,而不是展现哪些数据
+    重要的是要理解底层概念
+    
 
 
 
