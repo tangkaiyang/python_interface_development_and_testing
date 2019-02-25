@@ -42,4 +42,28 @@ Django开发一个发布会签到系统
 
         POST请求
         将上面的get改为post即method="post"
-
+        "CSRF verification failed. Request aborted.""跨站请求伪造"(Cross-Site Request Forgery, CSRF)漏洞
+        ,Django针对CSRF的保护措施是在生成的每个表单中放置一个自动生成的令牌,通过这个令牌判断POST请求是否来自
+        同一网站
+        之前的模板都是纯粹的HTML,在这里要首次使用到Django的模板,使用"模板标签"(template tag)添加CSRF令牌.在
+        form表单中添加{% csrf_token %}
+            ....
+            <form...>
+                ...
+                {% csrf_token %}
+                ...
+            </form>
+            ...
+        此时POST请求.处理username和password参数外,还多了一个csrfmiddlewaretoken字段,该字段的值为当前会话ID
+        加上一个秘钥的散列值
+        如果想忽略掉该检查,可以在../guest/settings.py文件中注释掉csrf
+            settings.py
+                #'django.middleware.csrf.CsrfViewMiddleWare'
+    3.1.2 处理登录请求
+        了解了将表单中的数据提交给服务器的方式(GET/POST),那么将登录数据提交给Django服务器的谁来处理?可以通过
+        form表单的action属性来指定提交的路径
+        index.html
+        ...
+            <form method="post" action="/login_action/">
+        ...
+        打开./guest/urls.py文件添加login_action/的路由
