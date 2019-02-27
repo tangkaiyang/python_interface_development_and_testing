@@ -67,3 +67,46 @@ Django开发一个发布会签到系统
             <form method="post" action="/login_action/">
         ...
         打开./guest/urls.py文件添加login_action/的路由
+        urls.py
+        ....
+        from sign import views
+        urlpatterns = [
+            .....
+            url(r'^login_action/$', views.login_action),
+        ]
+        打开sign/views.py文件,创建login_action视图函数
+        views.py
+        from django.shortcuts import render
+        from django.http import HttpResponse
+
+        ....
+        # 登录动作
+        def login_action(request):
+            if request.method == 'POST':
+                username = request.POST.get('username', '')
+                password = request.POST.get('password', '')
+                if usernmame == 'admin' and password == 'admin123':
+                    return HttpResponse('login success!')
+                else:
+                    return render(request, 'index.html', {'error': 'username or password error!'})
+        通过login_action函数来处理登录请求
+        客户端发送的请求信息全部包含在request中,Django文档
+            https://docs.djangoproject.com/en/1.10/ref/request-response/
+        首相,通过request.method方法得到客户发送的请求方式,判断其是否为POST请求类型
+        接着,通过request.POST来获取POST请求,通过get()方法来寻找name为"username"和"password"的POST参数,如果参数没有提交
+        ,返回一个空的字符串.此处的"username"和"password"对应form表单中的<input>标签的name属性,可见这个属性的重要性
+        再接下来,判断POST请求得到的username和password是否为"admin/admin123",如果是则通过HttpResponse类返回"login success!"
+        字符串.否则,将通过render返回index.html登录页面,并且顺带返回错误提示的字典{'error':'username or password error!'}
+        但是,显然index.html页面上并没有显示错误提示的地方,所以,需要在index.html页面中添加Django模板
+        index.html
+        .....
+            <form method="post" action="/login_action/">
+                <input name="username" type="text" placeholder="username" ><br>
+                <input name="password" type="text" placeholder="password" ><br>
+                {{ error }}<br>
+                <button id="btn" type="submit">登录</button>
+                {% csrf_token %}
+            </form>
+        .....
+        此处又使用到了Django的模板语言,添加{{ error }},它对应render返回字典中的key,并且在登录失败的页面中显示value
+        ,即"username or password error!"信息.
