@@ -2,7 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="dd5af010-4f39-4061-8d9d-a4dbf71aff5d" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/guest/sign/templates/event_manage.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chapter03/第三章 Django视图" beforeDir="false" afterPath="$PROJECT_DIR$/chapter03/第三章 Django视图" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/guest/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/guest/db.sqlite3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/guest/guest/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/guest/guest/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/guest/sign/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/guest/sign/views.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -13,21 +18,45 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/guest/sign/templates/index.html">
+        <entry file="file://$PROJECT_DIR$/guest/sign/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="138">
-              <caret line="6" column="6" selection-start-line="6" selection-start-column="6" selection-end-line="6" selection-end-column="6" />
+            <state relative-caret-position="447">
+              <caret line="20" column="19" selection-start-line="20" selection-start-column="19" selection-end-line="20" selection-end-column="19" />
+              <folding>
+                <element signature="e#0#35#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/guest/guest/urls.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="529">
+              <caret line="23" column="48" selection-start-line="23" selection-start-column="48" selection-end-line="23" selection-end-column="48" />
+              <folding>
+                <element signature="e#639#671#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/guest/sign/views.py">
+        <entry file="file://$PROJECT_DIR$/chapter03/第三章 Django视图">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="230">
-              <caret line="10" column="26" selection-start-line="10" selection-start-column="26" selection-end-line="10" selection-end-column="26" />
+            <state relative-caret-position="747">
+              <caret line="214" column="4" selection-start-line="214" selection-start-column="4" selection-end-line="214" selection-end-column="4" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/guest/sign/templates/event_manage.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="207">
+              <caret line="9" column="37" selection-start-line="9" selection-start-column="37" selection-end-line="9" selection-end-column="37" />
               <folding>
-                <element signature="e#0#35#0" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -67,8 +96,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="HTML File" />
         <option value="Python Script" />
+        <option value="HTML File" />
       </list>
     </option>
   </component>
@@ -81,18 +110,19 @@
         <option value="$PROJECT_DIR$/chapter01/第一章 python学习必知" />
         <option value="$PROJECT_DIR$/guest/sign/index.html" />
         <option value="$PROJECT_DIR$/chapter02/第二章 Django入门" />
-        <option value="$PROJECT_DIR$/guest/guest/urls.py" />
-        <option value="$PROJECT_DIR$/chapter03/第三章 Django视图" />
         <option value="$PROJECT_DIR$/guest/sign/templates/index.html" />
         <option value="$PROJECT_DIR$/guest/guest/settings.py" />
+        <option value="$PROJECT_DIR$/guest/guest/urls.py" />
+        <option value="$PROJECT_DIR$/guest/sign/templates/event_manage.html" />
         <option value="$PROJECT_DIR$/guest/sign/views.py" />
+        <option value="$PROJECT_DIR$/chapter03/第三章 Django视图" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="318" />
-    <option name="y" value="86" />
-    <option name="width" value="1159" />
+    <option name="x" value="372" />
+    <option name="y" value="116" />
+    <option name="width" value="1106" />
     <option name="height" value="952" />
   </component>
   <component name="ProjectView">
@@ -100,7 +130,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -151,6 +180,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -228,10 +258,11 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="318" y="86" width="1159" height="952" extended-state="0" />
+    <frame x="810" y="49" width="1106" height="952" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info id="Favorites" order="0" side_tool="true" />
-      <window_info active="true" content_ui="combo" id="Project" order="1" visible="true" weight="0.18911687" />
+      <window_info content_ui="combo" id="Project" order="1" weight="0.237751" />
       <window_info id="Structure" order="2" weight="0.24977699" />
       <window_info anchor="bottom" id="Terminal" order="0" weight="0.31501833" />
       <window_info anchor="bottom" id="Event Log" order="1" side_tool="true" />
@@ -255,9 +286,6 @@
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/第一章 python学习必知/第一章 python学习必知" />
-    <entry file="file://$PROJECT_DIR$/guest/__init__.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/chapter01/第一章 python学习必知">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="897">
@@ -265,27 +293,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/chapter03/第三章 Django视图">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="489">
-          <caret line="111" column="42" selection-start-line="111" selection-start-column="42" selection-end-line="111" selection-end-column="42" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/chapter02/第二章 Django入门">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="383">
           <caret line="135" lean-forward="true" selection-start-line="135" selection-end-line="135" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/guest/guest/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="368">
-          <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
-          <folding>
-            <element signature="e#639#671#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -361,13 +372,43 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/guest/guest/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="529">
+          <caret line="23" column="48" selection-start-line="23" selection-start-column="48" selection-end-line="23" selection-end-column="48" />
+          <folding>
+            <element signature="e#639#671#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/guest/__init__.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/guest/sign/templates/event_manage.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="207">
+          <caret line="9" column="37" selection-start-line="9" selection-start-column="37" selection-end-line="9" selection-end-column="37" />
+          <folding>
+            <element signature="n#style#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/guest/sign/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="230">
-          <caret line="10" column="26" selection-start-line="10" selection-start-column="26" selection-end-line="10" selection-end-column="26" />
+        <state relative-caret-position="447">
+          <caret line="20" column="19" selection-start-line="20" selection-start-column="19" selection-end-line="20" selection-end-column="19" />
           <folding>
             <element signature="e#0#35#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/chapter03/第三章 Django视图">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="747">
+          <caret line="214" column="4" selection-start-line="214" selection-start-column="4" selection-end-line="214" selection-end-column="4" />
         </state>
       </provider>
     </entry>
