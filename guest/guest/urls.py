@@ -18,6 +18,8 @@ from django.contrib import admin
 from sign import views # 导入sign应用views文件
 
 urlpatterns = [
+    url(r'^$', views.index),
+    url(r'^accounts/login/$', views.index),
     url(r'^admin/', admin.site.urls),
     url(r'^index/$', views.index), # 添加index/路径设置
     url(r'^login_action/$', views.login_action),

@@ -1,0 +1,213 @@
+Web应用中,主观逻辑经常牵涉到与数据库的交互.以数据库驱动网站在后台连接数据库服务器,从中取出一些数据,然后在Web页面用漂亮的格式展示
+这些数据.这个网站也可能会向访问者提供修改数据库数据的方法.许多复杂的网站提供了以上两种功能的某种结合
+对应发布会签到系统,是以数据管理为主的网站,主要管理发布会和嘉宾数据.有一个观点,对于数据驱动的Web系统,数据库表的设计完成,就相当于
+Web系统已经完成一半,可见数据库表设计的难度,以及在Web开发中的重要性
+4.1 设计系统表
+    Django提供完善的模型(model)层主要用来创建和存取数据,不需要我们直接对数据库操作.
+    Django模型基础知识:
+    每个模型是一个python类,继承django.db.models.model类.
+    该模型的每个属性表示一个数据库表字段
+    所有这一切,以及给你一个自动生成的数据库访问的API
+    打开../sign/models.py文件,完成表的创建
+    models.py
+    from django.db import models
+
+
+    # Create your modes here
+    # 发布会表
+    class Event(models.Model):
+        name = models.CharField(max_length=100)     # 发布会标题
+        limit = models.IntegerField()               # 参加人数
+        status = modelsBooleanField()               # 状态
+        address = models.CharField(max_length=200)  # 地址
+        start_time = models.DateTimeField('events time')    # 发布会时间
+        create_time = modelsDateTimeField('auto_now=True')  # 创建时间(自动获取当前时间)
+
+
+        def __str__(self):
+            return self.name
+
+    # 嘉宾表
+    class Guest(models.Model):
+    event = models.ForeignKey(Event)                # 关联发布会id
+    realname = models.CharField(max_length=64)      # 姓名
+    phone = models.CharField(max_length=16)         # 手机号
+    email = models.EmailField()                     # 邮箱
+    sign = models.BooleanField()                    # 签到状态
+    create_time = models.DateTimeField(auto_now=True)       # 创建时间(自动获取当前时间)
+
+
+    class Meta:
+        unique_together = ("event", "phone")
+
+    def __str__(self):
+        return self.realname
+    对于产品发布会来说,显然它是一个事件.那么时间,地点,人物等要素必不可少.数据库表的设计需要围绕着这些要素进行
+    关于发布会表(Event类)和嘉宾表(Guest类)的每一个字段
+    首先,发布会表和嘉宾表中默认都会生成自增id,而我们在创建模型时不需要声明该字段
+    其次,发布会表中增加了status字段用于表示发布会的状态是否开启,用于控制该发布会是否可用.
+    再次,嘉宾表中通过event_id关联发布会,一个条嘉宾信息一定所属于某一场发布会.
+    最后,对于一场发布会来说,一般会选择手机号作为一位嘉宾的验证信息,所以对于一场发布会来说,手机号必须是唯一的.除了嘉宾id外,这里
+    通过发布会id+手机号来作为联合主键.
+    __str__()方法告诉python如何将对象以str的方式显示出来.所以,为每个模型类添加了__str__()方法
+    Django数据类型:
+    如下表:...\Lib\site-packages\django\db\models\fields\__init__.py文件
+        类型                          说明
+        AutoField                       用于存放integer类型的数字
+        BooleanField                    用于存放布尔类型的数据(True或False)
+        CharField                       用于存放字符型的数据,需要指定长度max_length
+        CommaSeparatedIntegerField      用于存放逗号隔开的integer类型的数据
+        DateField                       日期型,必须是"YYYY-MM-DD"格式
+        DateTimeField                   日期时间型,必须是"YYYY-MM-DD HH:MM[:ss[.uuuuuu]][TZ]"格式
+        DecimalField                    小数型,用于存放小数的数字
+        EmailField                      电子邮件类型
+        FilePathField                   文件路径类类型,FilePathFields must have either 'allow_files' or 'allow_folders'
+                                        set to True
+        FloatField                      浮点型.用于存放浮点型数据
+        IntegerField                    用于存放integer类型的数字
+        BigIntegerField                 用于存放大integer类型的数字,最大数支持:9223372036854775807
+        GenericIPAddressField           存放IP地址的类型,IPv4和IPv6地址,字符串格式
+        NullBooleanField                value must be either None, True or False
+        PositiveIntegerField            Positive integer
+        PositiveSmallIntegerField       Positive small integer
+        SlugField                       需要定义max_length的值
+        SmallIntegerField               Small integer
+        TextField                       用于存放文本类型的数据
+        TimeField                       时间类型."HH:MM[:ss[.uuuuuu]]"格式
+        URLField                        用于存放URL地址
+        BinaryField                     Raw binary data
+    进行数据库迁移
+        python manage.py makemigrations sign
+        python manage.py migrate
+4.2 admin后台管理
+    可以通过Admin后台管理用户组/用户表
+    同样可以通过Admin后台管理创建的发布会表和嘉宾表
+    ../sign/admin.py文件
+    admin.py
+    from django.contrib import admin
+    from sign.models import Event, Guest
+
+    # Register your models here
+    admin.site.register(Event)
+    admin.site.register(Guest)
+    这些代码通知admin管理工具为这些模块逐一提供界面
+    登录admin后台:http://127.0.0.1:8000/admin
+    在后台添加发布会
+    在后台显示更多字段,修改../sign/admin.py文件
+    admin.py
+    ....
+    # Register your models here.
+    class EventAdmin(admin.ModelAdmin):
+        list_display = ['name', 'status', 'start_time', 'id']
+
+    class GuestAdmin(admin.ModelAdmin):
+        list_display = ['realname', 'phone', 'email', 'sign', 'create_time', 'event']
+
+    admin.site.register(Event, EventAdmin)
+    admin.site.register(Guest, GuestAdmin)
+    新建了EventAdmin类,继承django.contrib.admin.ModelAdmin类,保存着一个类的自定义配置,以供Admin管理工具使用.这里只自定义了
+    一项:list_display,它是一个字段名称的数组,用于定义要在列表中显示哪些字段.当然,这些字段名称必须是模型中的Event()类定义的
+    接下来修改admin.site.register()调用,添加了EventAdmin.可以理解为:用EventAdmin选项注册Event模块
+    然后,对Guest模块也做了同样的操作
+    Admin管理后台提供了很强的定制性,甚至可以非常方便的生成搜索栏和过滤器.
+    打开.../sign/admin.py文件,修改如下:
+    admin.py
+    .....
+    # Register your models here.
+    class EventAdmin(admin.ModelAdmin):
+        list_display = ['name', 'status', 'start_time', 'id']
+        search_fields = ['name'] # 搜索栏
+        list_filter = ['status'] # 过滤器
+    class GuestAdmin(admin.ModelAdmin):
+        list_display = ['realname', 'phone', 'email', 'sign', 'create_time', 'event']
+        search_field = ['realname', 'phone']    # 搜索栏
+        list_filter = ['sign']                  # 过滤器
+    ....
+
+    search_field用于创建表字段的搜索器,可以设置搜索关键字匹配多个表字段.
+    list_filter用于创建字段过滤器
+4.3 基本数据访问
+    练习数据库表的操作,manage.py提供的shell命令,可以在该模式下练习数据库表的操作
+        python manage.py shell
+    进入Django特供版shell,该模式下才能操作Django模型
+        from sign.models import Event, Guest
+        Event.objects.all()
+        Guest.objects.all()
+    from sign.models import Event, Guest
+    导入sign应用下的models.py中的Event表和Guest表
+    table.objects.all()
+    获得table(Event, Gues表)中的所有对象
+
+    4.3.1 插入数据
+        from datetime import datetime
+        e1 = Event(id=2, name="Thunders vs Jazz", limit=20000, status=True, address='Unknow',start_time=datetime(2019,2,
+        23,10,30,0))
+        e1.save()
+    因为start_time字段需要设置日期时间,所以导入和datetime.datetime()方法,但是,我们收到了一行警告信息关于UTC,暂时忽略
+
+    可以通过table.objects.create()方法将两步合为一步,
+        Event.objects.create(id=3,name='Thunders vs Nuggets', limit=30000,status=True,address='Pepsi Center',start_time=
+        datetime(2019,2,27,11,30,0))
+        Guest.objects.create(realname='Nikola Jokic',phone='23413154145',email='jotech@dd.com',sign=False,event_id=3)
+    说明:表的id字段已经设置了自增,所以,该字段为空可以添加数据,但在创建嘉宾时数据需要指定关联的发布会id.
+
+
+    4.3.2 查询数据
+    查询无疑是数据库表中使用频率最高的操作
+    table.objects.get()方法用于从数据库表中取得一条匹配的结果,返回一个对象,如果记录不存在的话,那么它会报DoesNotExist类型错误
+    通过name='Thunders vs Nuggets'作为查询条件
+        e1 = Event.objects.get(name='Thunders vs Nuggets')
+        e1
+        e1.address
+        e1.start_time
+
+        Event.objects.get(name='Thunders vs Nuggets').status
+        Event.objects.get(name='Thunders vs Nuggets').limit
+        Event.objects.get(name='Thunders').address
+    如果没有完全匹配到,或抛出DoesNotExist异常
+
+    模糊查询
+    table.objects.filter()方法是从数据库取得匹配的结果,返回一个对象列表,如果记录不存在,返回[]
+        e2 = Event.objects.filter(name__contains='Thunder')
+        e2
+    在name和contains之间用双下划线.这里,contains部分会被Django翻译成LIKE语句
+
+    通过嘉宾信息查询其关联的发布会信息.查看phone=17757989076这位嘉宾所参加的发布会信息
+        g1 = Guest.objects.get(phone='17757989076')
+        g1.event
+        g1.event.name
+        g1.event.address
+
+
+    4.3.3 删除数据
+    查询phone='17757989076'的嘉宾,通过delete()方法删除
+        g2 = Guest.objects.get(phone='17757989076')
+        g2.delete()
+
+        Guest.objects.get(phone='17757989076').delete()
+
+
+    4.3.4 更新数据
+    查询phone='17757989076'的嘉宾,更新realname='Nicklo Jokic II'
+        g3 = Guest.objects.get("phone= 17757989076")
+        g3.realname='Nicklo Jokic II'
+        g3.save()
+
+        Guest.objects.select_for_update().filter('phone=17757989076').update(realname='Nicklo Jokic II')
+
+
+4.4 SQLite 管理工具
+    4.4.1 SQLiteManager
+    4.4.2 SQLiteStudio
+
+
+4.5 配置MySQL
+    处理python自带的SQLite3之外,Django支持:
+        PostgreSQL
+        MySQL
+        Oracle
+    以MySQL为例,安装,在Django中的配置
+
+    4.5.1 安装MySQL
+
+
