@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.contrib import auth  # 调用Django自带的用户系统
 from django.contrib.auth.decorators import login_required  # 调用修饰符
+from sign.models import Event, Guest
 
 
 # Create your views here.
@@ -35,5 +36,23 @@ def login_action(request):
 def event_manage(request):
     # return render(request, "event_manage.html")
     # username = request.COOKIES.get('user', '')  # 读取浏览器cookie
-    username = request.session.get('user', '') # 读取浏览器session
-    return render(request, "event_manage.html", {"user": username})
+    # username = request.session.get('user', '') # 读取浏览器session
+    # return render(request, "event_manage.html", {"user": username})
+    event_list = Event.objects.all()
+    username = request.session.get('user', '')
+    return render(request, "event_manage.html", {"user": username, "events": event_list})
+
+# 发布会名称搜索
+@login_required
+def search_name(request):
+    username = request.session.get('user', '')
+    search_name = request.GET.get("name", "")
+    event_list = Event.objects.filter(name__contains=search_name)
+    return render(request, "event_manage.html", {"user": username, "events": event_list})
+
+# 嘉宾管理
+@login_required
+def guest_manage(request):
+    username = request.session.get("user", '')
+    guest_list = Guest.objects.all()
+    return render(request, "guest_manage.html", {"user": username, "guests": guest_list})

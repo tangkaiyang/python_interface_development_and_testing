@@ -282,4 +282,22 @@ Web系统已经完成一半,可见数据库表设计的难度,以及在Web开发
     关于sql_mode的设置,参考Django文档:https://docs.djangoproject.com/en/1.10/ref/databases/#mysql-sql-mode
     注意:切换了数据库之后,之前Sqlite3数据库里的数据并不能复制到MySQL中,所以需要重新进行数据库同步,是数据模型重新在MySQL数据库中
     生成表
-    
+        python3 manage.py migrate
+    报错,Django在连接MySQL数据库默认使用的是MySQLdb驱动,然而我们并没有安装该驱动,因为它不支持python3,我们现在安装的是PyMySQL驱动,
+
+
+    让当前的Django通过PyMySQL来连接MySQL数据库:
+    在../guest/__init__.py目录下添加
+    __init__.py
+    import pymysql
+    pymysql.install_as_MySQLdb()
+
+    重新执行数据库同步
+        python manage.py migrate
+    更换数据库,Admin后台超级管理员账号(admin/admin123456)也需要重新创建
+        python manage.py createsuperuser
+
+
+    4.5.4 MySQL管理工具
+    Navicat
+    SQLyog

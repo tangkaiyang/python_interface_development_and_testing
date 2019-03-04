@@ -27,34 +27,36 @@
                 </div>
             </div>
         </nav>
-        <!-- 发布会搜索表单 -->
-            <div class="page-header" style="paddint-top: 60px;">
-                <div id="navbar" class="navbar-collapse collapse">
-                    <form class="navbar-form" method="get" action="/search_name/">
-                        <div class="form-group">
-                            <input name="name" type="text" placeholder="名称" class="form-control">
-                        </div>
-                        <button type="submit" class="btn btn-success">搜索</button>
-                    </form>
-                </div>
-            </div>
-        <!-- 发布会列表 -->
+        <!--&lt;!&ndash; 发布会搜索表单 &ndash;&gt;-->
+            <!--<div class="page-header" style="paddint-top: 60px;">-->
+                <!--<div id="navbar" class="navbar-collapse collapse">-->
+                    <!--<form class="navbar-form" method="get" action="/search_name/">-->
+                        <!--<div class="form-group">-->
+                            <!--<input name="name" type="text" placeholder="名称" class="form-control">-->
+                        <!--</div>-->
+                        <!--<button type="submit" class="btn btn-success">搜索</button>-->
+                    <!--</form>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!-- 嘉宾列表 -->
         <div class="row" style="padding-top: 80px;">
             <div class="col-md-6">
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th>id</th><th>名称</th><th>状态</th><th>地址</th><th>时间</th>
+                            <th>id</th><th>名称</th><th>手机</th><th>Email</th><th>签到</th>
+                            <th>发布会</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {% for event in events %}
+                        {% for guest in guests %}
                             <tr>
-                                <td>{{ event.id }}</td>
-                                <td>{{ event.name }}</td>
-                                <td>{{ event.status }}</td>
-                                <td>{{ event.address }}</td>
-                                <td>{{ event.start_time }}</td>
+                                <td>{{ guest.id }}</td>
+                                <td>{{ guest.realname }}</td>
+                                <td>{{ guest.phone }}</td>
+                                <td>{{ guest.email }}</td>
+                                <td>{{ guest.sign }}</td>
+                                <td>{{ guest.event }}</td>
                             </tr>
                         {% endfor %}
                     </tbody>

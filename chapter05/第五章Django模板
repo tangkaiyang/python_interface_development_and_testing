@@ -1,0 +1,147 @@
+已完成登录模块,完成数据库及表的设计
+本章重点,发布会管理,嘉宾管理页面.虽然使用Admin后台来管理发布会和嘉宾数据非常方便,然而,它扩展起来非常困难,需要自己开发管理页面.
+还需要开发一个嘉宾的签到页面
+5.1 Django-bootstrap3
+使用Bootstrap前端框架结合Django来开发Web页面
+Bootstrap介绍:
+    Bootstrap,来自Twitter,是目前很受欢迎的前端框架.Bootstrap是基于HTML,CSS,JAVASCRIPT的,它简单灵活,使得Web开发更加快捷.是一个
+    CSS/HTML框架.Bootstrap提供了优雅的HTML和CSS规范,它即是由动态CSS语言Less写成
+Django-bootstrap3:将Bootstrap3集成到Django中,作为Django的一个应用提供.在Django中使用Bootstrap会更加方便
+
+通过pip安装:
+    pip install django-bootstrap3
+
+在../guest/settings.py文件中添加"bootstrap3"应用
+settings.py
+....
+# Application definition
+
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib,staticfiles',
+    'sign',
+    'bootstrap3',
+    ]
+....
+
+5.2 发布会管理
+    开发发布会管理列表与发布会名称搜索
+
+    5.2.1 发布会列表
+    回到视图的开发,打开../sign/views.py文件,修改event_manage()视图函数
+    views.py
+    ....
+    from sign.models import Event
+    ....
+
+    # 发布会管理
+    @login_required
+    def event_manage(request):
+        event_list = Event.objects.all()
+        username = request.session.get('user', '')
+        return render(request, "event_manage.html", {"user": username, "events": event_list})
+
+    Event.objects.all()用于查询所有发布会对象(数据),通过render()函数附加在event_manage.html页面返回给客户端浏览器
+
+
+    打开并编写../templates/event_manage.html页面
+            .....
+    对于BootStrap框架来说,它主要通过class属性来设置HTML标签的样式
+        {% load bootstrap3 %}
+        {% bootstrap_css %}
+        {% bootstrap_javascript %}
+    加载Bootstrap3应用,CSS和JavaScript文件.{% %}为Django的模板标签,Django的模板语言将会在该标签下编写
+        <title>Guest Manage</title>
+    设置页面标题为Guest Manage
+        <li class="active"><a href="#">发布会</a></li>
+        <li><a href="/guest_manage/">嘉宾</a></li>
+    设置页面导航栏,class="active"表示,当前菜单处于选中状态.href="/guest_manage/"用于跳转到嘉宾管理页,稍后完善
+        <li><a href="#">{{ uesr }}</a></li>
+        <li><a href="/logout/">退出</a></li>
+    {{}}Django的模板标签,用于定义显示变量.这里将会通过浏览器sessionid获取到对应的登录用户名,并显示.href="/logout/"定义退出路径,
+    稍后完善
+        {% for event in events %}
+            <tr>
+                <td>{{ event.id }}</td>
+                <td>{{ event.name }}</td>
+                <td>{{ event.status }}</td>
+                <td>{{ event.address }}</td>
+                <td>{{ event.start_time }}</td>
+            </tr>
+        {% endfor %}
+    Django模板语言,用于循环打印发布的id,name,status,address和start_time等字段.Django模板语言与Python有所不同.for语句需要有对
+    应的endfor来表示语句的结束,同样,if分支语句也需要endif来表示语句的结束
+
+
+    5.2.2 发布会搜索
+    开发针对发布会名称的搜索功能
+    在../templates/event_manage.html页面上创建搜索表单
+        ......
+    查询表单和我们前面开发的登录表单一样.不过需要注意以下几个地方,
+    method="get" HTTP请求方式:action="/search_name/"搜索请求路径:name="name"搜索输入框的name属性值
+
+    注意将搜索路径的路由/search_name/添加至url.py文件中
+    urls.py
+    ....
+    from sign import views
+
+    urlpatterns = [
+        .....
+        url(r'^search_name/$', views.search_name),
+    ]
+
+    打开../sign/views.py文件,创建search_name()视图函数.
+    views.py
+    # 发布会名称搜索
+    def search_name(request):
+        username = request.session.get('user', '')
+        search_name = request.GET.get("name", "")
+        event_list = Event.objects.filter(name__contains=search_name)
+        return render(request, "event_manage.html", {"user": username, "events": event_list})
+    通过GET方法接收搜索关键字,并通过模糊查询,匹配发布会name字段,然后把匹配到的发布会列表返回到页面上
+
+
+5.3 嘉宾管理
+嘉宾管理页面的开发与发布会管理页面基本类似
+    5.3.1 嘉宾列表
+    创建.../templates/guest_manage.html页面
+    .....
+    与event_manage.html页面结构基本相同,不过需要注意两个地方:
+        <li><a href="/event_manage/">发布会</a></li>
+        <li class="active"><a href="#">嘉宾</a></li>
+    当前处理嘉宾管理页面,所以,设置嘉宾按钮处于选中状态(class="active").为发布按钮设置跳转路径(href="/event_manage/")
+        {% for guest in guests %}
+            <tr>
+                <td>{{guest.id}}</td>
+                <td>{{guest.realname}}</td>
+                <td>{{guest.phone}}</td>
+                <td>{{guest.email}}</td>
+                <td>{{guest.sign}}</td>
+                <td>{{guest.event}}</td>
+            </tr>
+            {%endfor%}
+    通过Django模板语言的for语句循环读取嘉宾列表,并显示id,realname,phone,email,sign,event等字段
+    在../guest/urls.py文件中添加嘉宾路径的路由
+    urls.py
+    ....
+    from sign import views
+
+    urlpatterns = [
+        .....
+        url(r'^guest_manage/$', views.guest_manage),
+    ]
+    打开../sign/views.py文件,创建guest_manage()视图函数
+    views.py
+    ....
+    from sign.models import Event, Guest
+    ....
+    # 嘉宾管理
+    @login_required
+    def guest_manage(request):
+        username = request.session.get('user', '')
+        guest_list = Guest.objects.all()
+        return render(request, "guest_manage.html", {"user": username, "guests": guest_list})
