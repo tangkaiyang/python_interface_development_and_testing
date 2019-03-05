@@ -145,3 +145,175 @@ INSTALLED_APPS = [
         username = request.session.get('user', '')
         guest_list = Guest.objects.all()
         return render(request, "guest_manage.html", {"user": username, "guests": guest_list})
+    注意:搜索框搜索条件在函数中设置 字段名+__contains
+        a href = '#' 点击链接刷新当前页面
+
+    5.3.2 分页器
+        Django的Paginator分页类.调用它即可完成列表的分页功能.
+        分页功能略为复杂,进入Django的shell模式练习Paginator类的基本使用
+        from django.core.paginator import Paginator     # 导入Paginator类
+        from sign.models import Guest                   # Guest下的所有表
+        guest_list = Guest.objects.all()                # 查询Guest表的所有数据
+        p = Paginator(guest_list, 2)                    # 创建每页2条数据的分页器
+        p.count                                         # 查看共多少条数据
+        p.page_range            # 查看共多少页(每页2条数据)循环结果为1,2(共2页)
+
+        page1 = p.page(1)       # 获取第一页的数据
+        page1                   # 当前第几页
+        page1.object_list       # 当前页的对象
+        for i in page1:         # 循环打印第一页的嘉宾的realname
+            print(p.realname)
+        page2 = p.page(2)       # 获取第二页的数据
+        page2.start_index()     # 本页的第一条数据
+        page2.end_index()       # 本页的最后一条数据
+        page2.has_previous()    # 是否有上一页
+        page2.has_next()        # 是否有下一页
+        page2.previous_page_number()        # 上一页是第几页
+        page2.next_page_number()            # 下一页是第几页
+
+        page3 = p.page(3)       # 获取第三页的数据
+        page3.has_next()        # 是否有下一页
+        page3.has_previous()    # 是否有上一页
+        page3.has_other_pages() # 是否有其他页
+        page3.previous_page_number()        # 前一页是第几页
+
+        实现分页面:
+        打开../sign/views.py文件,修改guest_manage()视图函数
+        views.py
+        ....
+        from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+        ....
+        # 嘉宾管理
+        @login_required
+        def guest_manage(request):
+            username = request.session.get('user', '')
+            guest_list = Guest.objects.all()
+            paginator = Paginator(guest_list, 2)
+            page = request.GET.get('page')
+            try:
+                contacts = paginator.page(page)
+            except PageNotAnInteger:
+                # If page is not an integer, deliver first page.
+                contacts = paginator.page(1)
+            except EmptyPage:
+                # If page is out of range (e.g. 9999), deliver last page of results.
+                contacts = paginator.page(paginator.num_pages)
+            return render(request, "guest_manage.html", {"user": username, "guests": contacts})
+        paginator = Paginator(guest_list, 2)
+        把查询出来的所有嘉宾列表guest_list放到Paginator类中,划分每页显示2条数据
+        page=request.GET.get('page')
+        通过GET请求得到当前要显示第几页的数据
+        contacts = paginator.page(page)
+        获取第page页的数据.如果当前没有页数,抛PageNotAnInteger异常,返回第一页的数据.如果超出最大页数的范围,抛EmptyPage
+        异常,返回最后一页的数据
+        最终,将得到的某一页数据返回到嘉宾管理页面上
+
+
+        在../templates/guest_manage.html页面上添加分页器的代码
+        guest_manage.html
+        ....
+5.4 签到功能
+    5.4.1 添加签到链接
+    签到功能属于某一场发布会,每一条发布会都提供了一个"签到"链接用来打开对应的签到页面
+    在../templates/event_manage.html页面,增加签到链接
+    event_manage.html
+    .....
+    当点击sign链接时,路径会默认跳转到"/sign_index/{{event.id}}/"路径.其中{{event.id}}为发布会的id.
+    target="{{event.id}}_blank"属性表示链接在新窗口中打开
+
+    在../guest/urls.py中添加路由
+    urls.py
+    ...
+    from sign import views
+
+    urlpatterns = [
+        ....
+        url(r'^sign_index/(?P<event_id>[0-9]+)/$', views.sign_index),
+    ]
+    (?P<event_id>[0-9]+)配置二级目录,发布会id,要求必须为数字.而且匹配的数字,将作为sign_index()视图函数的参数
+    5.4.2 签到页面
+    打开../sign/views.py文件,创建sign_index()视图函数
+    views.py
+    from django.shortcuts import render, get_object_or_404
+    ....
+    # 签到页面
+    @login_required
+    def sign_index(request, event_id):
+        event = get_object_or_404(Event, id=event_id)
+        return render(request, 'sign_index.html', {'event': event})
+
+    创建../templates/sign_index.html签到页面
+    sign_index.html
+    ....
+    <a class="navbar-brand" href="#">{{ event.name }}</a>
+    将页面标题设置为发布会名称
+    <li><a href="/event_manage/">发布会</a></li>
+    <li><a href="/guest_manage/">嘉宾</a></li>
+    设置发布会与嘉宾导航链接
+    <form class="navbar-form" method="post" action="/sign_index_action/{{ event.id }}/">
+    签到表单通过POST请求提交到/sign_index_action/{{event.id}}/,二级目录会以发布会id替换
+
+    5.4.3 签到动作
+    当在签到输入框中输入手机号,点击"签到"按钮之后,该动作要如何处理?
+    ../guest/urls.py添加签到路径的路由
+    urls.py
+    ....
+    from sign import views
+    urlpatterns = [
+        ....
+        url(r'^sign_index_action/(?P<event_id>[0-9]+)/$', views.sign_index_action),
+    ]
+
+    ../sign/views.py文件创建sign_index_action()视图函数
+    views.py
+    ....
+    # 签到动作
+    @login_required
+    def sign_index_action(request, event_id):
+        event = get_objects_or_404(Event, id=event_id)
+        phone = request.POST.get('phone','')
+
+        result = Guest.objects.filter(phone=phone)
+        if not result:
+            return render(request, 'sign_index.html', {'event': event, 'hint': 'phone error.'})
+        result = Guest.objects.get(phone=phone, event_id=event_id)
+        if result.sign:
+            return render(request, 'sign_index.html', {'event': event, 'hint': 'event id or phone error.'})
+        result = Guest.objects.get(phone=phone, event_id = event_id)
+        if result.sign:
+            return render(request, 'sign_index.html', {'event': event, 'hint': "user has sign in."})
+        else:
+            Guest.objects.filter(phone=phone, event_id=event_id).updata(sign='1')
+            return render(request, 'sign_index.html', {'event': event, 'hint':'sign in success!', 'guest':result})
+    # 注意:filter方法返回查询机Queryset,获取对象使用get方法
+    对于发布会的签到动作,做了以下条件的判断.
+    首先,查询Guest表判断游湖输入的手机号是否存在,如果不存在提示用户"手机号为空或不存在".
+    然后,通过手机和发布会id两个条件来查询Guest表,如果结果为空将提示"该用户未参加此次发布会."
+    最后,再通过手机号查询Guest表,判断该手机号的签到状态是否为1,如果为1,表示已经签到过了,返回用户"已签到",否则,将
+    提示用户"签到成功",并返回签到用户的信息.
+
+    修改../templates/sign_index.html页面,增加sign_index_action()视图函数返回的提示信息位置
+
+    如果签到失败,将会显示{{hint}}提示信息;如果签到成功,将会显示{{hint}}提示信息和用户名称及手机号
+5.5 退出系统
+实现登录的退出
+打开../urls.py,添加退出目录的路由
+urls.py
+.....
+from sign import views
+urlpatterns = [
+    ....
+    url(r'^logout/$', views.logout),
+]
+打开../sign/views.py文件,创建logout()视图函数
+views.py
+.....
+# 退出登录
+@login_required
+def logout(request):
+    auth.logout(request)  # 退出登录
+    response = HttpResponseRedirect('/index/')
+    return response
+Django除了提供auth.login()函数用于登录,还有auth.logout()函数用于系统的退出,它可以帮我们清除掉浏览器保存
+的用户信息,所以,我们不用考虑如何删除浏览器cookie等问题
+

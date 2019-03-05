@@ -1,0 +1,173 @@
+6.1 unittest framework
+提供用例组织与执行
+提供丰富的比较方法
+提供丰富的日志
+
+单元测试:unittest
+HTTP接口自动化测试:unittest+Requests
+WebUI自动化测试:unittest+Selenium
+移动自动化测试:unittest+Appium
+
+import导入unittest单元测试框架
+创建CountTest类继承unittest.TestCase类
+setUp()和tearDown()在单元测试框架中比较特别,它们分别在每一个测试用例的开始和结束执行.
+setUp()方法用于测试用例执行前的初始化工作,例如初始化变量,生成数据库测试数据,打开浏览器等.
+tearDown()方法与setUp()方法相呼应,用于测试用例执行之后的善后工作,例如清除数据库测试数据,
+关闭文件,关闭浏览器等
+unittest要求测试方法必须以"test"开头,例如,test_add,test_sub等
+调用unittest.TestSuite()类中的addTest()方法项测试套件中添加测试用例.简单的可以将
+测试套件理解为运行测试用例的集合
+通过unittest.TextTestRunner()类中的run()方法运行测试套件中的测试用例
+如果想默认运行当前测试文件下的所有测试用例,可以直接使用unittest.main()方法.那么
+main()方法在查找测试用例时按照两个规则.首先,该测试类必须继承unittest.TestCase类;
+其次,该测试类下面的方法必须以"test"开头
+
+6.2 Testing in Django
+Web应用程序是由逻辑几层-从HTTP的级请求处理,以形成验证和处理,以模板渲染.随着Django的测试执行框架和各种使用工具,
+可以模拟请求,插入测试数据,检查您的应用程序的输出,一般检查你的代码是做什么的,应该做的事情.
+Django使用的是内置与Python标准库的unittest单元测试框架.也可以使用任何其他Python测试框架:
+Django提供了一个API和工具,可以融合其他的单元测试框架
+    6.2.1 A simple example
+    在创建Django应用时,默认已经生成了tests.py文件
+    .../sign/tests.py,编写测试代码
+    tests.py
+    from django.test import TestCase
+    from sign.models import Event, Guest
+
+    # Create your tests here.
+    class ModelTest(TestCase):
+        def setUp(self):
+            Event.objects.create(id=3, name="oneplus 3 event", status=True, limit=2000,
+                                address='shenzhen', start_time='2016-08-31 02:18:22')
+            Guest.objects.create(id=5, event_id=3, realname='alen',
+                                phone='13711001101', email='alen@mail.com', sign=False)
+        def test_event_models(self):
+            result = Event.objects.get(name="oneplus 3 event")
+            self.assertEqual(result.address, "shenzhen")
+            self.assertTrue(result.status)
+
+        def test_guest_models(self):
+            result = Guest.objects.get(phone='13711001101')
+            self.assertEqual(result.realname, "alen")
+            self.assertTrue(result.sign)
+测试用例的实现:
+首先,创建ModelTest类,继承django.test的TestCase类
+然后,在setUp()初始化方法中,创建一条发布会和嘉宾数据
+最后,通过test_event_models()和test_guest_models()测试方法,分别查询两张表的数据,
+断言表中的数据是否正确
+执行测试用例,切换到项目的根目录下,通过manage.py提供的"test"命令运行测试
+    python manage.py test
+#   注:运行时报Warning: (3135, "'NO_ZERO_DATE', 'NO_ZERO_IN_DATE' and 'ERROR_FOR_DIVISION_BY_ZERO'
+    sql modes should be used with strict mode. They will be merged with strict mode in a future release.")
+    需要注释掉settings.py中DATABASE中options的设置即可
+
+Django在执行setUp()方法中的数据库初始化时,并非真正的向数据库表中插入了数据.所以,数据库并不会因为运行测试而产生测试数据
+当测试用例执行失败时,从提示信息中可以很容易找到错误的原因
+    6.2.2 Run test case
+    manage.py中的test命令会直接执行所有测试.但是编写的用例越来越多时,测试运行的情况就复杂起来,比如要制定特定的测试模块,
+    或测试类,又或者想执行测试文件名包含了'test'的文件
+    通过参数可以控制Django项目不同级别的测试
+    运行sign应用下的所有测试用例:
+        python manage.py test sign
+    运行sign应用下的tests.py测试文件:
+        python manage.py test sign.tests
+    运行sign应用tests.py测试文件下的ModelTest测试类
+        python manage.py test sign.tests.ModelTest
+    执行ModelTest测试类下面的test_event_models测试方法
+
+
+6.3 The test views
+客户端测试是一个Python类,它充当了一个虚拟的网络浏览器,让您测试您的视图层,并与你的Django的应用程序编程方式进行交互
+客户端测试可以做的事情:
+    模拟"GET"和"POST"请求,观察响应结果--从HTTP(headers, status codes)到页面内容
+    检查重定向链(如果有的话),在每一步检查URL和status code
+    用一个包括特定值的模板context来测试一个request被Django模板渲染
+进入Django shell模式,建立测试环境
+    from django.test.utils import setup_test_environment
+    setup_test_environment() # setup_test_environment()用测试前的初始化测试环境
+    from django.test import Client # 导入Client()测试类,测试登录视图
+    c = Client()
+    response = c.get('/index/')
+    response.status_code
+Client()类提供的get()和post()方法可以模拟GET/POST请求.通过get()请求"/index/"路径,即为登录页面,得到的返回码为200,表示成功
+
+    6.3.1 Test Index
+    接下来打开../sign/tests.py文件,编写测试用例
+    tests.py
+    ....
+    class IndexPageTest(TestCase):
+        """测试index登录首页"""
+        def test_index_page_renders_index_template(self):
+        '''测试index视图'''
+        response = self.client.get('/')
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'index.html')
+    client.get()方法从TestCase父类继承而来,用于请求一个路径,assertEqual()服务器对客户端的应答是否为200,assertTemplatesUsed()
+    断言是否用给定的index.html模板响应
+
+    6.3.2 Test Login action
+    继续在../sign/tests.py文件中编写测试用例
+    tests.py
+    ....
+    from django.test import Client
+    from django.contrib.auth.models import User
+    ...
+    class LoginActionTest(TestCase):
+        '''测试登录函数'''
+        def setUp(self):
+            User.objects.create_user('admin', 'admin@mail.com', 'admin123456')
+            self.c = Client()
+        def test_login_action_username_password_null(self):
+            '''用户名密码为空'''
+            test_data = {'username':'', 'password': ''}
+            response = self.c.post('/login_action/', data=test_data)
+            self.assertEqual(response.status_code, 200)
+            self.assertIn(b"username or password error!", response.content)
+        def test_login_action_username_password_error(self):
+            '''用户名密码错误'''
+            test_data = {'username': 'abc', 'password': '123'}
+            response = self.c.post('/login_action/', data=test_data)
+            self.assertEqual(response.status_code, 200)
+            self.assertIn(r"username or password error!", response.content) # r应为b,需要传输byte类型注意
+        def test_login_action_success(self):
+            '''登录成功'''
+            test_data = {'username': 'admin', 'password': 'admin123456'}
+            response = self.c.post('/login_action/', test_data)
+            self.assertEqual(response.status_code, 302)
+    在setUp()初始化方法中,调用User.objects.create_user()创建登录用户数据.Client()类提供的get()和post()
+    方法可以模拟GET/POST请求
+    "/login_action/"为用户登录的路径
+    {'username':'admin', 'password': 'admin123456'}字典中的内容为用户登录的用户名密码
+    前两条用例分别为用户名/密码为空,和用户名/密码错误.assertIn()断言在放回的HTML中包含"username or password error!"
+    提示.当在用例中输入了正确的用户名和密码,HTTP返回的结果是302而不是200,因为login_action视图函数中,当用户登录
+    验证成功后,通过HttpResponseRedirect('/event_manage/')跳转到了发布会管理视图,这是一个重定向,所以HTTP返回码是302
+    6.3.3 Test Event Manage
+    继续在../sign/tests.py文件中编写发布会管理的测试用例
+    tests.py
+    ....
+    from sign.models import Event, Guest
+    from django.test import Client
+    from datetime import datetime
+    ....
+    class EventManageTest(TestCase):
+        """发布会管理"""
+        def setUp(self):
+            Event.objects.create(id=2, name='xiaomi5', limit=2000, status=True,address='beijing',
+                                start_time=datetime(2016, 8, 10, 14, 0, 0))
+            self.c = Client()
+        def test_event_manage_success(self):
+            '''测试发布会:xiaomi5'''
+            response = self.c.post('/event_manage/')
+            self.assertEqual(response.status_code, 200)
+            self.assertIn(b"xiaomi5", response.content)
+            self.assertIn(b"beijing", response.content)
+        def test_event_manage_search_success(self):
+            '''测试发布会搜索'''
+            response = self.c.post('/search_name/', {"name":"xiaomi5"})
+            self.assertEqual(response.status_code, 200)
+            self.assertIn(b"xiaomi5", response.content)
+            self.assertIn(b"beijing", response.content)
+    关于发布会管理的测试代码与登录视图相同
+    此用例要想运行通过,需要在views.py视图文件中将event_manage()和search_name()函数的
+    @login_required装饰器去掉,因为这两个函数依赖于登录,然而,Client()所提供的get()和post()方法
+    并没有验证登录的参数
