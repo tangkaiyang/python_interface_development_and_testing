@@ -56,7 +56,7 @@ def search_name(request):
 
 
 # 嘉宾管理
-@login_required
+# @login_required
 def guest_manage(request):
     username = request.session.get("user", '')
     guest_list = Guest.objects.all()
@@ -74,7 +74,7 @@ def guest_manage(request):
 
 
 # 嘉宾姓名搜索
-@login_required
+# @login_required
 def search_realname(request):
     username = request.session.get('user', '')
     search_realname = request.GET.get("realname", "")
@@ -84,14 +84,14 @@ def search_realname(request):
 
 
 # 签到页面
-@login_required
+# @login_required
 def sign_index(request, event_id):
     event = get_object_or_404(Event, id=event_id)
     return render(request, 'sign_index.html', {'event': event})
 
 
 # 签到动作
-@login_required
+# @login_required
 def sign_index_action(request, event_id):
     event = get_object_or_404(Event, id=event_id)
     phone = request.POST.get('phone', '')

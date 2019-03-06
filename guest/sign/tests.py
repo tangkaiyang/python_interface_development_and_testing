@@ -87,3 +87,66 @@ class EventManageTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn(b"xiaomi5", response.content)
         self.assertIn(b"beijing", response.content)
+
+class TestGuestManage(TestCase):
+    """测试嘉宾管理"""
+    def setUp(self):
+        Event.objects.create(id=1, name="xiaomi5", limit=2000,
+                             status=True, address='beijing',
+                             start_time=datetime(2016, 8, 10, 14, 0, 0))
+        Guest.objects.create(realname="alen", phone="18611001100",
+                             email='alen@mail.com', sign=0, event_id=1)
+        self.c = Client()
+
+    def test_event_manage_success(self):
+        """测试嘉宾信息"""
+        response = self.c.post("/guest_manage/")
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b"alen", response.content)
+        self.assertIn(b"18611001100", response.content)
+
+    def test_guest_manage_search_realname(self):
+        """测试嘉宾搜索"""
+        response = self.c.post("/search_realname/", {"realname": "alen"})
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b"alen", response.content)
+        self.assertIn(b"18611001100", response.content)
+
+
+class SignIndexActionTest(TestCase):
+    """测试发布会签到"""
+
+    def setUp(self):
+        Event.objects.create(id=1, name="xiaomi5", limit=2000, address='beijing',
+                             status=1, start_time='2017-8-10 12:30:00')
+        Event.objects.create(id=2, name="oneplus4", limit=2000, address='shenzhen',
+                             status=1, start_time='2017-6-10 12:30:00')
+        Guest.objects.create(realname="alen", phone=18611001100,
+                             email='alen@mail.com', sign=0, event_id=1)
+        Guest.objects.create(realname="una", phone=18611001101,
+                             email='una@mail.com', sign=1, event_id=2)
+        self.c = Client()
+
+    def test_sign_index_action_phone_null(self):
+        """手机号为空"""
+        response = self.c.post('/sign_index_action/1/', {"phone": ""})
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b"phone error.", response.content)
+
+    def test_sign_index_action_phone_or_event_id_error(self):
+        """手机号或发布会id错误"""
+        response = self.c.post('/sign_index_action/2/', {"phone": "18611001100"})
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b"event id or phone error.", response.content)
+
+    def test_sign_index_action_user_sign_has(self):
+        """用户已签到"""
+        response = self.c.post('/sign_index_action/2/', {"phone": "18611001101"})
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b"user has sign in.", response.content)
+
+    def test_sign_action_sign_success(self):
+        """签到成功"""
+        response = self.c.post('/sign_index_action/1/', {"phone": 18611001100})
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b"sign in success!", response.content)

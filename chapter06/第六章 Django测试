@@ -171,3 +171,81 @@ Client()类提供的get()和post()方法可以模拟GET/POST请求.通过get()�
     此用例要想运行通过,需要在views.py视图文件中将event_manage()和search_name()函数的
     @login_required装饰器去掉,因为这两个函数依赖于登录,然而,Client()所提供的get()和post()方法
     并没有验证登录的参数
+    6.3.4 Test Guest Manage
+    继续在../sign/tests.py文件中编写嘉宾管理测试用例
+    tests.py
+    ....
+    class GuestManageTest(TestCase):
+        """嘉宾管理"""
+        def setUp(self):
+            Event.objects.create(id=1, name="xiaomi5", limit=2000, address='bejing', status=1,
+                                start_time=datetime(2016,8,10,14,0,0))
+            Guest.objects.create(realname="alen",phone=18611001100,email='alen@mail.com',sign=0,
+                                event_id=1)
+            self.c = Client()
+
+        def test_event_manage_success(self):
+            """测试嘉宾信息:alen"""
+            response=self.c.post('/guest_manage/')
+            self.assertEqual(response.status_code, 200)
+            self.assertIn(b"alen", response.content)
+            self.assertIn(b"18611001100",response.content)
+
+        def test_guest_manage_search_success(self):
+            """测试嘉宾搜索"""
+            response = self.c.post('/search_realname/', {"realname": alen})
+            self.assertEqual(response.status_code, 200)
+            self.assertIn(b"alen", response.content)
+            self.assertIn(b"18611001100", response.conten)
+    关于嘉宾管理的用例要想运行通过,需要在views.py视图文件中将guest_manage()和search_realname()函数的
+    @login_required装饰器去掉.
+
+    6.3.5 Test User Sign
+    继续在../sign/tests.py文件中编写用户签到的测试用例
+    tests.py
+    ....
+    class SignIndexActionTest(TestCase):
+        """发布会签到"""
+
+        def setUp(self):
+            Event.objects.create(id=1, name="xiaomi5", limit=2000,
+                                address=''beijing', status=1,
+                                start_time='2017-8-10 12:30:00')
+            Event.objects.create(id=2, name="oneplus4", limit=2000,
+                                address="shenzhen", status=1,
+                                start_time='2017-6-10 12:30:00')
+            Guest.objects.create(realname='alen', phone=18611001100,
+                                email='alen@mail.com', sign=0, event_id=1)
+            Guest.objects.create(realname='una', phone=18611001101,
+                                email='una@mail.com', sign=1, event_id=2)
+            self.c = Client()
+
+        def test_sign_index_action_phone_null(self):
+            """手机号为空"""
+            response = self.c.post("/sign_index_action/1/", {"phone": ""})
+            self.assertEqual(response.status_code, 200)
+            self.assertIn(b"event id or phone error.", response.content)
+
+        def test_sign_index_action_user_sign_has(self):
+            """手机号或发布会id错误"""
+            response = self.c.post('/sign_index_action/2/', {"phone": "18611001100"})
+            self.assertEqual(response.status_code, 200)
+            self.assertIn(b"event id or phone error.", response.content)
+
+        def test_sign_index_action_user_sign_has(self):
+            """用户已签到"""
+            response = self.c.post('/sign_index_action/2/', {"phone": "18611001100"})
+            self.assertEqual(response.status_code, 200)
+            self.assertIn(b"user has sign in.", response.content)
+
+        def test_sign_index_action_sign_success(self):
+            """签到成功"""
+            response = self.c.post('sign_index_action/1/', {"phone": "18611001100"})
+            self.assertEqual(response.status_code, 200)
+            self.assertIn(b"sign in success", response.content)
+    首先用例想要运行通过,需要在views.py视图文件中将 sign_index_action()函数的@login_required装饰器去掉
+    其次,关于签到功能,测试的情况比较多,所以在setUp()中创建测试数据需要注意.创建了两条发布会"xiaomi5"和
+    "oneplus5", 嘉宾"alen"所属于"xiaomi5",嘉宾"una"所属于"oneplus4",并且"una"的签到状态为已签到
+    当通过alen的手机号18611001100在oneplus4发布会页面签到时,会提示"event id or phone error."发布会id与
+    手机号不匹配
+    当通过una手机号签到时,将会提示user has sign in.用户已签到
