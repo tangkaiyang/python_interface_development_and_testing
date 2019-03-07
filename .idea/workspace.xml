@@ -2,17 +2,18 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="dd5af010-4f39-4061-8d9d-a4dbf71aff5d" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/chapter07/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chapter07/demo.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chapter07/interface_demo.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chapter07/第七章 接口相关概念" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chapter08/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chapter08/views_if.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chapter08/第八章 开发Web接口" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/chapter09/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/chapter09/第九章 接口测试工具介绍" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/chapter10/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/chapter10/interface_test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/chapter10/第十章 接口测试框架设计" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/guest/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/guest/sign/urls.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/guest/sign/views_if.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chapter06/第六章 Django测试" beforeDir="false" afterPath="$PROJECT_DIR$/chapter06/第六章 Django测试" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/guest/sign/tests.py" beforeDir="false" afterPath="$PROJECT_DIR$/guest/sign/tests.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/guest/sign/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/guest/sign/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chapter08/views_if.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/chapter08/第八章 开发Web接口" beforeDir="false" afterPath="$PROJECT_DIR$/chapter08/第八章 开发Web接口" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/guest/guest/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/guest/guest/urls.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -23,22 +24,19 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/chapter08/第八章 开发Web接口">
+        <entry file="file://$PROJECT_DIR$/chapter10/第十章 接口测试框架设计">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="224">
-              <caret line="220" column="61" lean-forward="true" selection-start-line="220" selection-start-column="61" selection-end-line="220" selection-end-column="61" />
+            <state relative-caret-position="362">
+              <caret line="99" column="66" lean-forward="true" selection-start-line="99" selection-start-column="66" selection-end-line="99" selection-end-column="66" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/chapter08/views_if.py">
+        <entry file="file://$PROJECT_DIR$/chapter10/interface_test.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1038">
-              <caret line="70" column="83" selection-start-line="70" selection-start-column="83" selection-end-line="70" selection-end-column="83" />
-              <folding>
-                <element signature="e#0#36#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="322">
+              <caret line="14" lean-forward="true" selection-start-line="14" selection-end-line="14" />
             </state>
           </provider>
         </entry>
@@ -75,7 +73,6 @@
         <option value="$PROJECT_DIR$/guest/sign/templates/guest_manage.html" />
         <option value="$PROJECT_DIR$/guest/sign/templates/event_manage.html" />
         <option value="$PROJECT_DIR$/guest/sign/templates/sign_index.html" />
-        <option value="$PROJECT_DIR$/guest/guest/urls.py" />
         <option value="$PROJECT_DIR$/chapter05/第五章Django模板" />
         <option value="$PROJECT_DIR$/chapter06/count.py" />
         <option value="$PROJECT_DIR$/chapter06/test_count.py" />
@@ -87,13 +84,18 @@
         <option value="$PROJECT_DIR$/chapter07/demo.py" />
         <option value="$PROJECT_DIR$/chapter07/interface_demo.py" />
         <option value="$PROJECT_DIR$/chapter08/views_if.py" />
+        <option value="$PROJECT_DIR$/guest/guest/urls.py" />
+        <option value="$PROJECT_DIR$/chapter08/urls.py" />
         <option value="$PROJECT_DIR$/chapter08/第八章 开发Web接口" />
+        <option value="$PROJECT_DIR$/chapter09/第九章 接口测试工具介绍" />
+        <option value="$PROJECT_DIR$/chapter10/interface_test.py" />
+        <option value="$PROJECT_DIR$/chapter10/第十章 接口测试框架设计" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="898" />
-    <option name="y" value="20" />
+    <option name="x" value="860" />
+    <option name="y" value="28" />
     <option name="width" value="1004" />
     <option name="height" value="1018" />
   </component>
@@ -102,7 +104,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -113,54 +114,29 @@
             <path>
               <item name="python_interface_development_and_testing" type="b2602c69:ProjectViewProjectNode" />
               <item name="python_interface_development_and_testing" type="462c0819:PsiDirectoryNode" />
-              <item name="chapter05" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="python_interface_development_and_testing" type="b2602c69:ProjectViewProjectNode" />
-              <item name="python_interface_development_and_testing" type="462c0819:PsiDirectoryNode" />
-              <item name="chapter06" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="python_interface_development_and_testing" type="b2602c69:ProjectViewProjectNode" />
-              <item name="python_interface_development_and_testing" type="462c0819:PsiDirectoryNode" />
-              <item name="chapter07" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="python_interface_development_and_testing" type="b2602c69:ProjectViewProjectNode" />
-              <item name="python_interface_development_and_testing" type="462c0819:PsiDirectoryNode" />
-              <item name="chapter08" type="462c0819:PsiDirectoryNode" />
+              <item name="chapter10" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="python_interface_development_and_testing" type="b2602c69:ProjectViewProjectNode" />
               <item name="python_interface_development_and_testing" type="462c0819:PsiDirectoryNode" />
               <item name="guest" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="python_interface_development_and_testing" type="b2602c69:ProjectViewProjectNode" />
-              <item name="python_interface_development_and_testing" type="462c0819:PsiDirectoryNode" />
-              <item name="guest" type="462c0819:PsiDirectoryNode" />
-              <item name="guest" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="python_interface_development_and_testing" type="b2602c69:ProjectViewProjectNode" />
-              <item name="python_interface_development_and_testing" type="462c0819:PsiDirectoryNode" />
-              <item name="guest" type="462c0819:PsiDirectoryNode" />
-              <item name="sign" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="D:\PycharmProjects\python_interface_development_and_testing\guest\sign\templates" />
       <recent name="D:\PycharmProjects\python_interface_development_and_testing\guest\sign" />
+      <recent name="D:\PycharmProjects\python_interface_development_and_testing\guest\sign\templates" />
       <recent name="D:\PycharmProjects\python_interface_development_and_testing\guest\index" />
       <recent name="D:\PycharmProjects\python_interface_development_and_testing\guest" />
       <recent name="D:\PycharmProjects\python_interface_development_and_testing\guest\guest" />
@@ -178,7 +154,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.interface_demo">
+  <component name="RunManager" selected="Python.interface_test">
     <configuration name="demo" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="python_interface_development_and_testing" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -221,7 +197,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="mysql_test" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="interface_test" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="python_interface_development_and_testing" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -229,11 +205,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/chapter04" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/chapter10" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/chapter04/mysql_test.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/chapter10/interface_test.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -274,11 +250,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.interface_test" />
         <item itemvalue="Python.interface_demo" />
         <item itemvalue="Python.demo" />
         <item itemvalue="Python tests.Nosetests in test_count.py" />
         <item itemvalue="Python tests.Nosetests for test_count.CounTest" />
-        <item itemvalue="Python.mysql_test" />
       </list>
     </recent_temporary>
   </component>
@@ -322,10 +298,11 @@
     </history-entry>
   </component>
   <component name="ToolWindowManager">
-    <frame x="898" y="20" width="1004" height="1018" extended-state="0" />
+    <frame x="860" y="28" width="1004" height="1018" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info id="Favorites" order="0" side_tool="true" />
-      <window_info content_ui="combo" id="Project" order="1" weight="0.24040632" />
+      <window_info content_ui="combo" id="Project" order="1" weight="0.24016564" />
       <window_info id="Structure" order="2" weight="0.24977699" />
       <window_info anchor="bottom" id="Terminal" order="0" weight="0.31501833" />
       <window_info anchor="bottom" id="Event Log" order="1" sideWeight="0.50047123" side_tool="true" weight="0.32967034" />
@@ -333,7 +310,7 @@
       <window_info anchor="bottom" id="Message" order="3" />
       <window_info anchor="bottom" id="Find" order="4" />
       <window_info anchor="bottom" id="Version Control" order="5" weight="0.32967034" />
-      <window_info anchor="bottom" id="Run" order="6" sideWeight="0.49952874" weight="0.23841807" />
+      <window_info anchor="bottom" id="Run" order="6" sideWeight="0.49952874" weight="0.36949152" />
       <window_info anchor="bottom" id="Debug" order="7" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="8" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="9" weight="0.4" />
@@ -520,16 +497,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/guest/guest/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="713">
-          <caret line="31" column="36" selection-start-line="31" selection-start-column="36" selection-end-line="31" selection-end-column="36" />
-          <folding>
-            <element signature="e#639#671#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/chapter06/count.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="299">
@@ -619,10 +586,20 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/chapter08/views_if.py">
+    <entry file="file://$PROJECT_DIR$/guest/guest/urls.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1038">
-          <caret line="70" column="83" selection-start-line="70" selection-start-column="83" selection-end-line="70" selection-end-column="83" />
+        <state relative-caret-position="506">
+          <caret line="22" column="37" lean-forward="true" selection-start-line="22" selection-start-column="37" selection-end-line="22" selection-end-column="37" />
+          <folding>
+            <element signature="e#639#671#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/guest/sign/views_if.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3749">
+          <caret line="163" lean-forward="true" selection-start-line="163" selection-end-line="163" />
           <folding>
             <element signature="e#0#36#0" expanded="true" />
           </folding>
@@ -631,8 +608,39 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/chapter08/第八章 开发Web接口">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="224">
-          <caret line="220" column="61" lean-forward="true" selection-start-line="220" selection-start-column="61" selection-end-line="220" selection-end-column="61" />
+        <state relative-caret-position="454">
+          <caret line="490" column="22" lean-forward="true" selection-start-line="490" selection-start-column="22" selection-end-line="490" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/guest/sign/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="46">
+          <caret line="2" lean-forward="true" selection-start-line="2" selection-end-line="2" />
+          <folding>
+            <element signature="e#0#32#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/chapter09/第九章 接口测试工具介绍">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="782">
+          <caret line="34" column="8" selection-start-line="34" selection-start-column="8" selection-end-line="34" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/chapter10/interface_test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="322">
+          <caret line="14" lean-forward="true" selection-start-line="14" selection-end-line="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/chapter10/第十章 接口测试框架设计">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="362">
+          <caret line="99" column="66" lean-forward="true" selection-start-line="99" selection-start-column="66" selection-end-line="99" selection-end-column="66" />
         </state>
       </provider>
     </entry>

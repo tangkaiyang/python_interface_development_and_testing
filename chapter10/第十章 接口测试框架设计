@@ -1,0 +1,114 @@
+自动化测试框架的开发:
+涉及到Requests库,unittest单元测试框架,MySQL数据库的操作,以及HTMLTestRunner生成测试报告
+自动化测试的基本思想,不仅仅局限于接口层的自动化测试
+
+
+10.1 接口测试工具的不足
+测试数据不可控制
+    接口测试本质是对数据的测试,调用接口,输入一些数据,随后,接口返回一些数据.验证接口返回
+    数据的正确性.
+    假设有一个用户查询接口,要输入用户名username,返回用户的年龄,性别,邮箱,手机号等数据.
+    在测试该接口时传参uesrname=zhangsan.首先,数据库里一定要有一条zhangsan的数据,否则接口返回为空.如果要想断言接口
+    返回值,如assert age==22;那么一定预先确定参数的返回值
+    要想接口测试用例可以正确的执行并断言通过,必须要事先插入测试数据(username=zhangsan;age=22,...),一般的接口测试
+    工具并不具备数据插入的功能.在用工具运行测试用例之前不得不手动向数据库中插入测试数据.这样我们的接口测试就没有那么
+    自动化了.
+无法测试加密接口
+    接口测试工具的一大硬伤,如我们前面开发的接口用工具测试完全没有问题,但遇到需要对接口参数进行加密/解密的接口,例如
+    md5,base64,AES等常见加密方式.又或者接口的参数需要使用时间戳,也是工具很难模拟的
+拓展能力不足
+    例如,我们想将测试报告发送到指定邮箱,测试工具无法实现等
+备注:关于上面的几点不足,大多情况Robot Framework可以满足,
+
+
+10.2 接口自动化测试设计
+被测      <===>  正式数据库
+接口      <================>      接口测试
+系统      <==> 测试数据库 <===>    项目
+一般的接口工具测试过程:
+1.接口工具调用被测系统的接口(传参username="zhangsan")
+2.系统接口根据传参(username="zhangsan")向正式数据库中查询数据
+3.将查询结果组装成一定格式的数据,并返回给被调用者
+4.人工或通过工具的断言功能检查接口测试的正确性
+而我们设计的接口自动化测试项目,为了使接口测试对数据变得可控,测试过程如下:
+1.接口测试项目先向测试数据库中插入测试数据(zhangsan的个人信息)
+2.调用被测系统接口(传参username="zhangsan")
+3.系统接口根据传参(username="zhangsan")向测试数据库中进行查询并得到zhangsan个人信息
+4.将查询结果组装成一定格式的数据,并返回给被调用者
+5.通过单元测试框架断言接口返回的数据(zhangsan的个人信息),并生成测试报告
+为了使正式数据库的数据不被污染,建议使用独立的测试数据库
+
+
+10.3 Requests库
+Requests是使用Apache2 Licensed许可证的HTTP库,用python编写
+Requests使用的是urllib3,因此继承了它的所有特性.Requests支持HTTP连接保持和连接池,支持使用cookie保持会话,支持文件
+上传,支持自动确定响应内容的编码,支持国际化的URL和POST数据自动编码.现代,国际化,人性化.
+Requests以PEP20的习语为中心开发:
+1.Beautiful is better than ugly.(美丽优于丑陋)
+2.Explicit is better than implicit.(清楚优于含糊)
+3.Simple is better than complex.(简单优于复杂)
+4.Complex is better than complicated.(复杂优于繁琐)
+5.Readability counts.(重要的是可读性)
+
+    10.3.1 安装与例子
+    pip安装requests:pip install requests
+    也可以在Github上克隆公共版本库
+    例子:
+    import requests
+    r = requests.get('http://api.github.com/user', auth=('user', 'pass')) # user与pass为具体Github账号密码
+    r.status_code
+    r.headers['content-type']
+    r.encoding
+    r.text
+    r.json()
+
+    10.3.2 接口测试
+    完整的接口测试用例
+    interface_test.py
+    import requests
+    #查询发布会接口
+    url = "http://127.0.0.1:8000/api/get_event_list/"
+    r = requests.get(url, params = {'eid': '1'})
+    result = r.json()
+    print(result)
+    assert result['status'] == 200
+    assert result['message'] == "success"
+    assert result['data']['name'] == "xx产品发布会"
+    assert result['data']['address'] == "北京奥林匹克公园水立方"
+    assert result['data']['start_time'] == "2016-10-15T18:00:00"
+    因为"发布会查询接口"是GET类型,所以,通过requests库的get()方法调用,第一个参数为调用接口的URL地址,params设置接口
+    的参数,参数以字典形式组织
+    json()方法可以将接口返回的json格式的数据转化为字典
+    接下来就是通过assert语句对接口字典中的数据进行判断.分别断言status,message和data的相关数据等
+
+    10.3.2 接口自动化测试
+    使用unittest单元测试框架开发接口测试用例
+    interface_test.py
+    import requests
+    import unittest
+
+    class GetEventListTest(unittest.TestCase):
+        """查询发布会接口测试"""
+        def setUp(self):
+            self.url = "http://127.0.0.1:8000/api/get_event_list/"
+        def test_get_event_null(self):
+            """发布会id为空"""
+            r = requests.get(self.url, params={'eid': ""})
+            result = r.json()
+            print(result)
+            self.assertEqual(result['status'], 10021)
+            self.assertEqual(result['message'], "parameter error")
+        ....
+        def test_get_event_success(self):
+            """发布会id为1,查询成功"""
+            r = requests.get(self.url, params={'eid': '1'})
+            result = r.json()
+            print(result)
+            self.assertEqual(result['status'], 200)
+            self.assertEqual(result['message'], "success")
+            self.assertEqual(result['data']['name'], "OKC vs PHI")
+            self.assertEqual(result['data']['address'], "切萨皮克能源球馆")
+            self.assertEqual(result['data']['start_time'], "2019-03-01T06:18:31Z")
+
+    if __name__ == '__main__':
+        unittest.main()

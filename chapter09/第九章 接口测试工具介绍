@@ -1,0 +1,35 @@
+接口测试工具分类
+接口测试工具:这类工具比较简单,可以模拟和发送HTTP请求,并显示返回数据.返回的数据由人工
+来检查正确性.例如Poster,Postman等
+接口自动化测试工具:相比接口测试工具,功能要更加强大,一般提供用例的批量执行,返回结果的
+断言以及测试报告的生成等,如Jmeter,Robot Framework,soap UI等
+接口性能测试工具:主要用于测试接口的性能测试,验证接口处理并发的能力,如Jmeter,LoadRunner,
+soapUI等工具
+
+9.1 Poster与Postman
+9.2 Jmeter测试工具
+Apache JMeter是Apache组织开发的基于Java的压力测试工具.用于对软件做压力测试,它最初设计
+用于Web应用测试,但后来扩展到其他测试领域
+对应Jmeter大多数印象应该是性能测试,但它用来做Web接口测试也非常不错
+9.3 Robot Framework测试框架
+Robot Framework的架构是一个通用型的验收测试和验收测试驱动开发的自动化测试框架(ATDD).
+它具有易于使用的表格来组织测试过程和测试数据
+robot framework脚本
+${a}            Set variable        59
+run keyword if  ${a}>=90            log             优秀
+...             ELSE IF             ${a}>=70        log         良好
+...             ELSE IF             ${a}>=60        log         及格
+...             ELSE                log             不及格
+Robot Framework特点:
+使用简单
+非常丰富的库
+可以像编程一样写测试用例
+支持开发系统关键字
+    9.3.1 环境搭建
+    安装Robot Framework:
+        pip install robotframework
+    安装Requests:
+        pip install requests
+    安装robotframework-requests
+        pip install robotframework-requests
+        
