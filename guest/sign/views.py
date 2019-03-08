@@ -6,6 +6,15 @@ from sign.models import Event, Guest
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render, get_object_or_404
 
+from matplotlib.figure import Figure
+from matplotlib.backends.backend_agg import FigureCanvasAgg
+from matplotlib.dates import DateFormatter
+import matplotlib.pyplot as plt
+import PIL
+
+import random
+import datetime
+
 
 # Create your views here.
 def index(request):
@@ -122,3 +131,30 @@ def logout(request):
     auth.logout(request)  # 退出登录
     response = HttpResponseRedirect('/index/')
     return response
+
+
+# def gen_mat(request):
+#     fig = plt.figure()
+#
+#     plt.rcParams['font.sans-serif'] = ['SimHei']
+#     plt.rcParams['axes.unicode_minus'] = False
+#
+#     data = {'丰田': 1, '丰田雷凌': 3, '别克英朗': 2, '北汽EU5': 29, '北汽EX360': 48, '北汽EX360 ': 1, '北汽Eu5': 1, '北汽eu5': 1,
+#             '吉利EV450': 1,
+#             '大众宝来': 59, '尼桑天籁': 16, '尼桑蓝鸟': 6, '尼桑轩逸': 129, '斯柯达速派': 46, '日产蓝鸟': 1, '日产轩逸': 4, '比亚迪秦': 1, '蓝鸟': 1,
+#             '轩逸': 2,
+#             '长安欧尚': 2, '雷凌双擎': 2, '雷凌双擎丰田': 1}
+#     x = data.keys()
+#     y = data.values()
+#     # 柱状图
+#     plt.subplot(111)
+#     plt.xlabel("汽车品牌")
+#     plt.ylabel("数量/辆")
+#     plt.xticks(size=8)
+#     fig.autofmt_xdate() # x轴刻度倾斜
+#     plt.bar(x, y)
+#     canvas = FigureCanvasAgg(fig)
+#     response = HttpResponse(content_type='image/jpg')
+#     canvas.print_jpg(response)
+#     plt.close()
+#     return response
