@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="dd5af010-4f39-4061-8d9d-a4dbf71aff5d" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/guest/guest/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/guest/guest/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/guest/sign/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/guest/sign/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chapter10/interface_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/chapter10/interface_test.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -17,8 +15,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/chapter10/第十章 接口测试框架设计">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-250">
-              <caret line="83" column="18" lean-forward="true" selection-start-line="83" selection-start-column="18" selection-end-line="83" selection-end-column="18" />
+            <state relative-caret-position="-1777">
+              <caret line="6" column="8" lean-forward="true" selection-start-line="6" selection-start-column="8" selection-end-line="6" selection-end-column="8" />
             </state>
           </provider>
         </entry>
@@ -26,8 +24,11 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/chapter10/interface_test.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="322">
-              <caret line="14" selection-start-line="14" selection-end-line="14" />
+            <state relative-caret-position="398">
+              <caret line="27" column="21" lean-forward="true" selection-start-line="27" selection-start-column="21" selection-end-line="27" selection-end-column="21" />
+              <folding>
+                <element signature="e#484#499#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -77,16 +78,16 @@
         <option value="$PROJECT_DIR$/chapter08/urls.py" />
         <option value="$PROJECT_DIR$/chapter08/第八章 开发Web接口" />
         <option value="$PROJECT_DIR$/chapter09/第九章 接口测试工具介绍" />
-        <option value="$PROJECT_DIR$/chapter10/interface_test.py" />
         <option value="$PROJECT_DIR$/chapter10/第十章 接口测试框架设计" />
         <option value="$PROJECT_DIR$/guest/sign/views.py" />
         <option value="$PROJECT_DIR$/guest/guest/urls.py" />
+        <option value="$PROJECT_DIR$/chapter10/interface_test.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="568" />
-    <option name="y" value="4" />
+    <option name="x" value="902" />
+    <option name="y" value="11" />
     <option name="width" value="1004" />
     <option name="height" value="1018" />
   </component>
@@ -122,7 +123,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.views">
+  <component name="RunManager" selected="Python.interface_test">
     <configuration name="demo" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="python_interface_development_and_testing" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -224,8 +225,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.views" />
         <item itemvalue="Python.interface_test" />
+        <item itemvalue="Python.views" />
         <item itemvalue="Python.interface_demo" />
         <item itemvalue="Python.demo" />
         <item itemvalue="Python tests.Nosetests in test_count.py" />
@@ -272,7 +273,7 @@
     </history-entry>
   </component>
   <component name="ToolWindowManager">
-    <frame x="568" y="4" width="1004" height="1018" extended-state="0" />
+    <frame x="902" y="11" width="1004" height="1018" extended-state="0" />
     <layout>
       <window_info id="Favorites" order="0" side_tool="true" />
       <window_info content_ui="combo" id="Project" order="1" weight="0.24016564" />
@@ -549,13 +550,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/chapter08/第八章 开发Web接口">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="454">
-          <caret line="490" column="22" lean-forward="true" selection-start-line="490" selection-start-column="22" selection-end-line="490" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/guest/sign/urls.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="46">
@@ -617,17 +611,27 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/chapter08/第八章 开发Web接口">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="316">
+          <caret line="490" column="22" lean-forward="true" selection-start-line="490" selection-start-column="22" selection-end-line="490" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/chapter10/第十章 接口测试框架设计">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-250">
-          <caret line="83" column="18" lean-forward="true" selection-start-line="83" selection-start-column="18" selection-end-line="83" selection-end-column="18" />
+        <state relative-caret-position="-1777">
+          <caret line="6" column="8" lean-forward="true" selection-start-line="6" selection-start-column="8" selection-end-line="6" selection-end-column="8" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/chapter10/interface_test.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="322">
-          <caret line="14" selection-start-line="14" selection-end-line="14" />
+        <state relative-caret-position="398">
+          <caret line="27" column="21" lean-forward="true" selection-start-line="27" selection-start-column="21" selection-end-line="27" selection-end-column="21" />
+          <folding>
+            <element signature="e#484#499#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
