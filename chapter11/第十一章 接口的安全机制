@@ -1,0 +1,430 @@
+11.1用户认证
+在测试Web接口时,接口工具还是Requests库都提供的Auth的选项/参数,这个选项提供了username和password的选项
+,但这里的Auth的用户名和密码与系统登录的用户名密码有所区别,登录的用户名/密码作为接口的参数
+来传输,而Auth不是,但它仍然包含在request请求中
+    11.1.1开发带Auth接口
+    接口的处理逻辑主要由views层完成
+    views_if_sec.py
+    from django.contrib import auth as django_auth
+    import hashlib
+    # 用户认证
+    def user_auth(request):
+        get_http_auth = request.META.get('HTTP_AUTHORIZATION', 'b')
+        auth = get_http_auth.split()
+        try:
+            auth_parts = base64.b64decode(auth[1].decode('iso-8859-1')\.partition(':')
+        except IndexError:
+            return "null"
+        userid, password = auth_parts[0], auth_parts[2]
+        user = django_auth.authenticate(username=userid, password=password)
+        if user is not None and user.is_active:
+            django_auth.login(request, user)
+            return "success"
+        else:
+            return "fail"
+    get_http_auth = request.META.get('HTTP_AUTHORIZATION', 'b')
+    request.META是一个python字典,包含了所有本次HTTP请求的Header信息,比如用户认证,IP地址和
+    用户Agent(通常是浏览器的名称和版本号)等
+    HTTP_AUTHORIZATION用于获取HTTP authorization
+    然后得到的数据:Basic YWRta............=
+    auth = get_http_auth.split()
+    通过split方法将其拆分成list.
+    auth_parts = base64.b6decode(auth[1].decode('iso-8859-1').aprtition(':'))
+    取出list中的加密串,通过base64对加密串进行解码.得到的数据为('admin',':','admin123456')
+    如果获取不到Auth信息,将会抛出IndexError异常,通过try...except...进行异常捕捉,
+    userid, password=auth_parts[0], auth_parts[2]
+    最后,取出元组中对应的用户id和密码
+    接下来调用Django的认证模块,对得到的Auth信息进行认证
+
+    views_if_sec.py
+    ..
+    # 发布会查询接口--增加用户认证
+    def get_event_list(request):
+        auth_result = user_auth(request)    # 调用认证函数
+        if auth_result == "null":
+            return JsonResponse({'status': 10011, 'message': 'user auth null'})
+        if auth_result == "fail":
+            return JsonResponse({'status': 10012, 'message': 'user auth fail'})
+        eid = request.GET.get("eid", "")        # 发布会id
+        name = request.GET.get("name", "")      # 发布会名称
+    ....
+    在../sign/urls.py文件中添加新的安全接口指向
+    urls.py
+    ...
+    from sign import views_if, views_if_sec
+    urlpatterns = [
+        ...
+        # security interface
+        # ex : /api/sec_get_event_list/
+        url(r'^sec_get_event_list/', views_if_sec.get_event_list, name='get_event_list'),
+    ]
+    这种认证方式安全性较低
+
+    11.2 数字签名
+    在使用HTTP/SOAP协议传输数据的时候,签名作为其中一个参数,可以起到关键作用
+    一,鉴权:通过客户的密钥,服务端的密钥匹配:
+    例:一个接口传参为:
+    http://127.0.0.1:8000/api/?a=1&b=2
+    假设签名的密钥为@admin123
+    加上签名之后的接口参数为:
+    http://127.0.0.1:8000/sign/?a=1&b=2&sign=@admin123
+    sign参数明文传输是不安全的,所以一般会通过加密算法进行加密
+    md5_test.py
+    import hashlib
+    md5 = hashlib.md5()
+    sign_str = "@admin123"
+    sign_bytes_utf8 = sign_str.encode(encoding="utf-8")
+    md5.update(sign_bytes_utf8)
+    sign_md5 = md5.hexdigest()
+    print(sign_md5)
+    执行程序将会得到:........
+    单作为鉴权,带签名的接口为:
+    ............sign=.......
+    因为MD5算法是不可逆向的,当服务器接受到请求之后,同样需要对"@admin123"进行MD5加密,然后,
+    比对调用者传来的sign加密串是否一致,从而来鉴别调用者是否有权限访问该接口
+    二,数据防篡改:参数是明文传输,将参数及密钥加密作为签名与服务器匹配:
+    http://127.0.0.1:8000/sign/?a=1&b=2
+    加密方式比前者要复杂
+    假设签名的密钥为:@admin123
+    签名的明文我:a=1&b=2&api_key=@admin123
+    再次通过上面的代码对整个接口参与值生成MD5加密串:.....
+    带参数的接口串为:
+    http://127.0.0.1:8000/sign/?a=1&b=2&sign=......
+    因为整个接口的参数做了加密,所以,所以只要任意一个参数发生变化,那么签名的验证就会失败.
+    从而起到了鉴权及数据完整性的保护.
+    不过,接口全参数的加密签名也存在弊端,因为MD5加密是不可逆的,所以,服务器端必须已知客户端的
+    接口参数和值,否则签名的验证就会失败.但一般接口在设计时对客户端所请求的参数并不完全已知,
+    例如,嘉宾手机号查询,服务器并不知道客户传的手机号具体是什么,只是通过数据库来查询该号码是否存在
+
+    11.2.1 开发接口
+    ../sign/views_if_sec.py视图文件,实现接口签名代码
+    views_if_sec.py
+    ..
+    # 用户签名+时间戳
+    def user_sign(request):
+        client_time = request.POST.get('time', '')
+        client_sign = request.POST.get('sign', '')
+        if client_time == '' or client_sign == '':
+            return "sign null"
+        # 服务器时间
+        now_time = time.time()
+        server_time = str(now_time).split('.')[0]
+        # 获取时间差
+        time_difference = int(server_time) - int(client_time)
+        if time_difference >= 60:
+            return "timeout"
+        # 签名检查
+        md5 = hashlib.md5()
+        sign_str = client_time + "&Guest-Bugmaster"
+        sign_bytes_utf8 = sign_str.encode(encoding="utf-8")
+        md5.update(sign_bytes_utf8)
+        server_sign = md5.hexdigest()
+        if server_sign != client_sign:
+            return "sign error"
+        else:
+            return "sign right"
+    首先,通过POST方法获取两个参数time和sign两个参数,并判断它们其中的任一一个为空,则返回"sign null"
+    接下来,是判断时间戳.需要客户端获取一个"当前时间戳",取当前时间
+    time_test.py
+    import time
+    # 当前时间戳
+    now_time = time.time()
+    print("当前时间戳:" + str(now_time))
+    # 转换成日期格式
+    otherStyleTime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(now_time))
+    print('日期格式:' + str(otherStyleTime))
+
+    python3生成的时间戳精度太高,使用split()函数截取小数点前面的时间
+    当服务器端口拿到客户端传来的时间戳后,服务器端也需要重新再获取以下当前实践出.如果服务器端的当前时间戳减去
+    客户端时间戳小于60,说明这个接口的请求时间是离现在最近的60秒之内.那么允许接口访问,如果超过60秒,则返回"time out"
+    这样就要求请求的客户端不断的获取当前时间戳作为接口参数来访问接口.所以,一直用固定的参数访问家口是无效的.
+    关于签名参数的生成.需要将api_key(密钥字符串:"&Guest-Bugmaster")和客户端发来的时间戳,两者拼接成一个新的字符串.
+    并且通过MD5对其进行加密.从而将加密后的字符串作为sign的字段的参数
+    服务器端以同样的规则来生成这样一个加密后的字符串,从而比较这个串是否相等,如果相等说明签名验证通过;如果不相等,则
+    返回"sign fail"
+    将签名功能应用到发布会接口中
+    views_if_sec.py
+    .....
+    # 添加发布会接口--增加签名+时间戳
+    def add_event(request):
+        sign_result = user_sign(request)    # 调用签名函数
+        if sign_result == "sign null":
+            return JsonResponse({'status': 10011, 'message': 'user sign null'})
+        elif sign_result == "timeout":
+            return JsonResponse({'status': 10012, 'message': 'user sign timeout'})
+        elif sign_result == "sign error":
+            return JsonResponse({'status': 10013, 'message': 'user sign error'})
+    ....
+    在../sign/urls.py文件中添加新的安全接口路由
+    urls.py
+    ....
+    from sign import views_if, views_if_sec
+    urlpatterns = [
+        ....
+        # security interface
+        # ex: /api/sec_add_event/
+        url(r'^sec_add_event/', views_if_sec.add_event, name = 'add_event'),
+    ]
+
+    11.2.3 编写接口用例
+    add_event_test.py
+    ....
+    class AddEventTest(unittest.TestCase):
+        def setUp(self):
+            self.base_url = "http://127.0.0.1:8000/api/sec_add_event/"
+            # app_key
+            self.api_key = "&Guest-Bugmaster"
+            # 当前时间
+            now_time = time()
+            self.client_time = str(now_time).split('.')[0]
+            # sign
+            md5 = hashlib.md5()
+            sign_str = self.client_time + self.api_key
+            sign_bytes_utf8 = sign_str.encode(encoding="utf-8")
+            md5.update(sign_bytes_utf8)
+            self.sign_md5 = md5.hexdigest()
+        def test_add_event_sign_null(self):
+            '''签名参数为空'''
+            payload = {'eid': 1, '':'', 'limit': '', 'address': '', 'start_time': '',
+                        'time': '', 'sign': ''}
+            r =requests.post(self.base_url, data=payload)
+            result = r.json()
+            self.assertEqual(result['status'], 10011)
+            self.assertEqual(result['message'], 'user sign null')
+
+        def test_add_event_time_out(self):
+            """请求超时"""
+            now_time = str(int(self.client_time) - 61)
+            payload = {'eid': 1, '':'', 'limit': '', 'address': '', 'start_time': '',
+                        'time': now_time, 'sign': 'abc'}
+            r = requests.post(self.base_url, data=payload)
+            result = r.json()
+            self.assertEqual(result['status'], 10012)
+            self.assertEqual(result['message'], 'user sign timeout')
+
+        def test_add_event_sign_error(self):
+            '''签名错误'''
+            payload = {'eid': 1, '': '', 'limit': '', 'address': '', 'start_time': '',
+                        'time': self.client_time, 'sign': 'abc'}
+            r = requests.post(self.base_url, data=payload)
+            result = r.json()
+            self.assertEqual(result['status'], 10013)
+            self.assertEqual(result['message'], 'user sign error')
+        ....
+
+        def test_add_event_success(self):
+            """添加成功"""
+            payload = {'eid': 11, 'name': '一加4手机发布会','limit': 2000,
+                        'address': '深圳宝体', 'start_time': '2017-06-10 12:00:00',
+                        'time': self.client_time, 'sign': self.sign_md5}
+            r = requests.post(self.base_url, data=payload)
+            result = r.json()
+            self.assertEqual(result['status'], 200)
+            self.assertEqual(result['message'], 'add event success')
+
+
+11.3 接口加密
+PyCrypto免费加密算法库,支持常见的DES,AES加密以及MD5,SHA各种HASH运算
+pip安装:pip install pycrypto 巨坑 pip install pycryptodome
+    11.3.1 PyCrypto库
+    例一:
+    SHA-256算法属于密码SHA-2系列哈希.它产生了一个消息的256位摘要
+    哈希值用作表示大量数据的固定大小的唯一值.两组数据的哈希值尽在相应数据也匹配时才应当匹配.数据的少量更改会在
+    哈希值中产生不可预知的大量更改
+    SHA256模块的使用:
+    SHA256_test.py
+    from Crypto.Hash import SHA256
+    hash = SHA256.new()
+    hash.update(b'message')
+    h = hash.digest()
+    # h = hash.hexdigest()
+    print(h)
+    得到的加密字符串就是通过将"message"加密之后得到.当然,也可以将其转换成16进制的字符串.digest()改为hexdigest()
+    例二:
+    AES是Advanced Encryption Standard的缩写,高级加密标准,是目前非常流行的加密算法之一
+    通过例子演示AES算法的加密与解密
+    加密:
+    AES_test.py
+    from Crypto.Cipher import AES
+    # 加密
+    obj = AES.new(b'This is a key123', AES.MODE_CBC, b'This is an IV456')
+    message = b"The answer is no"
+    cliphertext = obj.encrypt(message)
+    print(cliphertext)
+
+    b"This is a key123"为key,长度有着严格的要求,必须为16,24或32位,否则报错
+    b"This is a IV456"为VI,长度要求更加严格,只能16位.否则,你将会看到下面的错误
+    然后,通过encrypt()方法对"message"字符串进行加密
+    解密:
+    当接收到加密的字符串后,解密这必须知道加密时所用的key和VI才能正确解密
+    AES_test.py
+    from Crypto.Cipher import AES
+    # 加密
+    obj = AES.new(b'This is a key123', AES.MODE_CBC, b'This is an IV456')
+    message = b"The answer is no"
+    ciphertext = obj.encrypt(message)
+    # 解密
+    obj2 = AES.new(b'This is a key123', AES.MODE_CBC, 'This is an IV456')
+    s = obj2.decrypt(ciphertext)
+    print(s)
+    通过decrypt()方法对加密后的字符串进行解密
+    例三:
+    强大的随机算法
+    random_test.py
+    from Crypto.Random import random
+    r = random.choice(['dogs', 'cats', 'bears'])
+    print(r)
+
+    11.3.2 AES加密接口开发
+    开发一个用AES加密算法的接口
+    interface_AES_test.py
+    from Crypto.Cipher import AES
+    import base64
+    import requests
+    import unittests
+    import json
+
+    class AESTest(unittest.TestCase):
+        def setUp(self):
+            BS = 16
+            self.pad = lambda s: s + (BS - len(s) % BS) * chr(BS - len(S) % BS)
+            self.base_url = "http://127.0.0.1:8000/sign/sec_get_guest_list/"
+            self.app_key = 'W7v4D60fds2Cmk2U'
+        def encryptBase64(self, src):
+            return base64.urlsafe_b64encode(src)
+        def encryptAES(self, src, key):
+            """生成AES密文"""
+            iv = b"1172311105789011"
+            cryptor = AES.new(key, AES.MODE_CBC, iv)
+            ciphertext = cryptor.encrypt(self.pad(src))
+            return self.encryptBase64(ciphertext)
+        def test_aes_interface(self):
+            """test aes interface"""
+            payload = {'eid': '1', 'phone': '13800138000'}
+            # 加密
+            encoded = self.encryptAES(json.dumps(payload), self.app_key).decode()
+            r = requests.post(self.base_url, data={'data': encoded})
+            result = r.json()
+            self.assertEqual(result['status'], 200)
+            self.assertEqual(result['message'], "success")
+
+    self.app_key = 'W7v4D60fds2Cmk2U'
+    payload = {'eid': '1', 'phone': '13800138000'}
+    首先定义好app_key和接口参数,app_key是密钥,只有合法的调用者才知道,这里同样选择使用字典格式来存放接口参数
+    encoded = self.encryptAES(json.dumps(payload), self.app_key).decode()
+    首先将payload参数转化为json格式,然后将参数和app_key传参给encryptAES()方法用于生成加密串
+    def encryptAES(self, src, key):
+        """生成AES密文"""
+        iv = b"1172311105789011"
+        cryptor = AES.new(key, AES.MODE_CBC, iv)
+        ciphertext = cryptor.encrypt(self.pad(src))
+        return self.encryptBase64(ciphertext)
+    IV同样是波阿米的,并且我们前面知道它必须是16位字节.然后通过encrypt()方法对src接口参数生成加密串,
+    encrypt()要加密的字符串有严格的长度要求,长度必须是16的倍数
+    可是,被加密的字符串的长度是不可控.接口参数的个数和长度可能会随意的变化.所以为了解决,需要对字符串进行处理,使其长度固定
+    self.pad = lambda s: s + (BS -len(s) % BS) * chr(BS - len(s) % BS)
+    通过lambda定义匿名函数来对字符串进行补足,使其长度为16的倍数.但这样的字符串太长,不适合传输
+    def encryptBase64(self, src):
+        return base64.urlsafe_b64encode(src)
+    通过base64模块的urlsafe_b64encode()方法对AES加密串进行二次加密
+    加密过程结束
+    r = requests.post(self.base_url, data = {"data": encoded})
+    将加密后的字符串作为接口的data参数发送给接口
+    当服务器接受到字符串之后,服务器端对加密串处理
+
+    views_if_sec.py
+    ....
+    # ===========AES加密算法=============
+    BS = 16
+    unpad = lambda s: s[0: - ord(s[-1])]
+    def decryptBase64(src):
+        return base64.urlsafe_b64decode(src)
+    def decryptAES(src, key):
+        """解析AES密文"""
+        src = decryptBase64(src)
+        iv = b"1172311105789011"
+        cryptor = AES.new(key, AES.MODE_CBC, iv)
+        text = cryptor.decrypt(src).decode()
+        return unpad(text)
+    def aes_encryption(request):
+        app_key = 'W7v4D60fdsCmk2U'
+        if request.method == "POST":
+            data = request.POST.get("data", "")
+        # 解密
+        decode = decryptAES(data, app_key)
+        # 转化为字典
+        dict_data = json.loads(decode)
+        return dict_data
+
+    app_key = 'W7v4D60fds2Cmk2U'
+    服务器端与合法客户端约定的密钥app_key
+    if request.method == "POST":
+        data = request.POST.get("data", "")
+    判断客户端请求是否为POST,通过POST.get()方法接受data参数
+    decode = decryptAES(data, app_key)
+    调用解密函数decryptAES(),传参加密字符串和app_key
+    def decryptAES(src, key):
+        """解析AES密文"""
+        src = decryptBase64(src)
+        iv = b"1172311105789011"
+        cryptor = AES.new(key, AES.MODE_CBC, iv)
+        text = cryptor.decrypt(src).decode()
+        return unpad(text)
+    首先调用decryptBase64()方法,将Base64加密字符串解密为AES加密字符串.然后,通过decrypt()对AES加密串进行解密
+    def decryptBase64(src):
+        return base64.urlsafe_b64decode(src)
+    对Base64字符串解密
+    BS = 16
+    unpad = lambda s: s[0: -ord(s[-1])]
+    最后,通过unpad匿名函数对字符串的长度还原.解密结束
+    dict_data = json.loads(decode)
+    return dict_data
+    将解密后字符串通过json.loads()方法转化为字典,并将该字典作为aes_encryption()函数的返回值
+
+    在获取嘉宾列表的接口中调用aes_encryption()函数进行AES加密字符串解密
+    views_if_sec.py
+    ...
+    # 嘉宾查询接口---AES算法
+    def get_guest_list(request):
+        dict_data = aes_encryption(request)
+        eid = dict_data['eid']
+        phone = dict_data['phone']
+        if eid == '':
+            return JsonResponse({'status': 10021, 'message': 'eid cannot be empty'})
+        if eid != '' and phone == '':
+            datas = []
+            results = Guest.objects.filter(event_id=eid)
+            if results:
+                for r in result:
+                    guest = {}
+                    guest['realname'] = r.realname
+                    guest['phone'] = r.phone
+                    guest['email'] = r.email
+                    guest['sign'] = r.sign
+                    datas.append(guest)
+                return JsonResponse({'status': 200, 'message': 'success', 'data': datas})
+            else:
+                return JsonResponse({'status': 10022, 'message': 'query result is empty'})
+        if eid != '' and phone != '':
+            guest = []
+            try:
+                result = Guest.objects.get(phone=phone, event_id=eid)
+            except ObjectDoesNotExist:
+                return JsonResponse({'status': 10022, 'message': 'query result is empty'})
+            else:
+                guest['realname'] = result.realname
+                guest['phone'] = result.phone
+                guest['email'] = result.email
+                guest['sign'] = result.sign
+                return JsonResponse({'status': 200, 'message': 'success', 'data': guest})
+
+        在../sign/urls.py文件中添加新的安全接口指向
+        urls.py
+        ...
+        from sign import views_if, views_if_sec
+        urlpatterns = [
+            ....
+            # security interface:
+            # ex : /api/sec_add_event/
+            url(r'^sec_get_guest_list/', views_if_sec.get_guest_list, name = 'get_guest_list'),
+        ]

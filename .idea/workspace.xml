@@ -2,7 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="dd5af010-4f39-4061-8d9d-a4dbf71aff5d" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/chapter10/interface_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/chapter10/interface_test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/chapter11/AES_test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/chapter11/SHA256_test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/chapter11/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/chapter11/random_test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/chapter11/time_test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/chapter11/第十一章 接口的安全机制" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -12,23 +18,47 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/chapter10/第十章 接口测试框架设计">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/chapter11/第十一章 接口的安全机制">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1777">
-              <caret line="6" column="8" lean-forward="true" selection-start-line="6" selection-start-column="8" selection-end-line="6" selection-end-column="8" />
+            <state relative-caret-position="790">
+              <caret line="428" column="95" selection-start-line="428" selection-start-column="95" selection-end-line="428" selection-end-column="95" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/chapter10/interface_test.py">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/chapter11/random_test.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="398">
-              <caret line="27" column="21" lean-forward="true" selection-start-line="27" selection-start-column="21" selection-end-line="27" selection-end-column="21" />
-              <folding>
-                <element signature="e#484#499#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="69">
+              <caret line="3" column="8" selection-start-line="3" selection-start-column="8" selection-end-line="3" selection-end-column="8" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/chapter11/SHA256_test.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="138">
+              <caret line="6" column="8" selection-start-line="6" selection-start-column="8" selection-end-line="6" selection-end-column="8" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/chapter11/AES_test.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="253">
+              <caret line="11" column="8" selection-start-line="11" selection-start-column="8" selection-end-line="11" selection-end-column="8" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/chapter11/time_test.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="184">
+              <caret line="8" column="36" selection-start-line="8" selection-start-column="36" selection-end-line="8" selection-end-column="36" />
             </state>
           </provider>
         </entry>
@@ -82,12 +112,19 @@
         <option value="$PROJECT_DIR$/guest/sign/views.py" />
         <option value="$PROJECT_DIR$/guest/guest/urls.py" />
         <option value="$PROJECT_DIR$/chapter10/interface_test.py" />
+        <option value="$PROJECT_DIR$/pyrequest/run_tests.py" />
+        <option value="$PROJECT_DIR$/guest/sign/views_if_sec.py" />
+        <option value="$PROJECT_DIR$/chapter11/time_test.py" />
+        <option value="$PROJECT_DIR$/chapter11/SHA256_test.py" />
+        <option value="$PROJECT_DIR$/chapter11/AES_test.py" />
+        <option value="$PROJECT_DIR$/chapter11/random_test.py" />
+        <option value="$PROJECT_DIR$/chapter11/第十一章 接口的安全机制" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="902" />
-    <option name="y" value="11" />
+    <option name="x" value="903" />
+    <option name="y" value="66" />
     <option name="width" value="1004" />
     <option name="height" value="1018" />
   </component>
@@ -123,8 +160,8 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.interface_test">
-    <configuration name="demo" type="PythonConfigurationType" factoryName="Python" temporary="true">
+  <component name="RunManager" selected="Python.random_test">
+    <configuration name="AES_test" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="python_interface_development_and_testing" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -132,11 +169,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/chapter07" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/chapter11" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/chapter07/demo.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/chapter11/AES_test.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -145,7 +182,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="interface_demo" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="SHA256_test" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="python_interface_development_and_testing" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -153,11 +190,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/chapter07" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/chapter11" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/chapter07/interface_demo.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/chapter11/SHA256_test.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -166,7 +203,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="interface_test" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="random_test" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="python_interface_development_and_testing" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -174,11 +211,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/chapter10" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/chapter11" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/chapter10/interface_test.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/chapter11/random_test.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -187,7 +224,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="views" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="run_tests" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="python_interface_development_and_testing" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -195,11 +232,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/guest/sign" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/pyrequest" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/guest/sign/views.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/pyrequest/run_tests.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -208,28 +245,34 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="Nosetests in test_count.py" type="tests" factoryName="Nosetests" temporary="true" nameIsGenerated="true">
+    <configuration name="time_test" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="python_interface_development_and_testing" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/chapter06" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/chapter11" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_regexPattern" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$/chapter06/test_count.py&quot;" />
-      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/chapter11/time_test.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.interface_test" />
-        <item itemvalue="Python.views" />
-        <item itemvalue="Python.interface_demo" />
-        <item itemvalue="Python.demo" />
-        <item itemvalue="Python tests.Nosetests in test_count.py" />
+        <item itemvalue="Python.random_test" />
+        <item itemvalue="Python.AES_test" />
+        <item itemvalue="Python.SHA256_test" />
+        <item itemvalue="Python.time_test" />
+        <item itemvalue="Python.run_tests" />
       </list>
     </recent_temporary>
   </component>
@@ -258,7 +301,14 @@
       <option name="project" value="LOCAL" />
       <updated>1551346267010</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="&quot;第十章&quot;">
+      <created>1552355730543</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1552355730543</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -273,7 +323,7 @@
     </history-entry>
   </component>
   <component name="ToolWindowManager">
-    <frame x="902" y="11" width="1004" height="1018" extended-state="0" />
+    <frame x="903" y="66" width="1004" height="1018" extended-state="0" />
     <layout>
       <window_info id="Favorites" order="0" side_tool="true" />
       <window_info content_ui="combo" id="Project" order="1" weight="0.24016564" />
@@ -284,7 +334,7 @@
       <window_info anchor="bottom" id="Message" order="3" />
       <window_info anchor="bottom" id="Find" order="4" />
       <window_info anchor="bottom" id="Version Control" order="5" weight="0.32967034" />
-      <window_info anchor="bottom" id="Run" order="6" sideWeight="0.49952874" weight="0.36949152" />
+      <window_info active="true" anchor="bottom" id="Run" order="6" sideWeight="0.49952874" visible="true" weight="0.24293785" />
       <window_info anchor="bottom" id="Debug" order="7" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="8" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="9" weight="0.4" />
@@ -316,10 +366,10 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="&quot;error&quot;" />
     <MESSAGE value="&quot;cookie session&quot;" />
-    <option name="LAST_COMMIT_MESSAGE" value="&quot;cookie session&quot;" />
+    <MESSAGE value="&quot;第十章&quot;" />
+    <option name="LAST_COMMIT_MESSAGE" value="&quot;第十章&quot;" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/第一章 python学习必知/第一章 python学习必知" />
     <entry file="file://$PROJECT_DIR$/chapter01/第一章 python学习必知">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="897">
@@ -620,18 +670,62 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/chapter10/第十章 接口测试框架设计">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1777">
-          <caret line="6" column="8" lean-forward="true" selection-start-line="6" selection-start-column="8" selection-end-line="6" selection-end-column="8" />
+        <state relative-caret-position="-563">
+          <caret line="73" column="34" lean-forward="true" selection-start-line="73" selection-start-column="34" selection-end-line="73" selection-end-column="34" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/chapter10/interface_test.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="398">
-          <caret line="27" column="21" lean-forward="true" selection-start-line="27" selection-start-column="21" selection-end-line="27" selection-end-column="21" />
-          <folding>
-            <element signature="e#484#499#0" expanded="true" />
-          </folding>
+          <caret line="27" column="21" selection-start-line="27" selection-start-column="21" selection-end-line="27" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pyrequest/run_tests.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="506">
+          <caret line="22" column="14" lean-forward="true" selection-start-line="22" selection-start-column="14" selection-end-line="22" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pyrequest/db_fixture/test_data.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/guest/sign/views_if_sec" />
+    <entry file="file://$PROJECT_DIR$/guest/sign/views_if_sec.py" />
+    <entry file="file://$PROJECT_DIR$/chapter11/第十一章 接口的安全机制">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="790">
+          <caret line="428" column="95" selection-start-line="428" selection-start-column="95" selection-end-line="428" selection-end-column="95" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/chapter11/random_test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="69">
+          <caret line="3" column="8" selection-start-line="3" selection-start-column="8" selection-end-line="3" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/chapter11/SHA256_test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="138">
+          <caret line="6" column="8" selection-start-line="6" selection-start-column="8" selection-end-line="6" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/chapter11/AES_test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="253">
+          <caret line="11" column="8" selection-start-line="11" selection-start-column="8" selection-end-line="11" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/chapter11/time_test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="184">
+          <caret line="8" column="36" selection-start-line="8" selection-start-column="36" selection-end-line="8" selection-end-column="36" />
         </state>
       </provider>
     </entry>
