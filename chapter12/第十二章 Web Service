@@ -1,0 +1,106 @@
+12.1 Web Service先关概念
+SOA
+Service Oriented Ambiguity,面向服务架构,简称SOA
+SOA的提出是在企业计算领域,就是要将紧耦合的系统,划分为面向业务的,粗粒度,松耦合,无状态的服务.服务发布
+出来供其他服务调用,一组相互依赖的服务就构成了SOA架构下的系统
+一般认为SOA是包含了运行环境,编程模型,架构风格和相关方法论等在内的一整套新的分布式软件系统构造方法和
+环境,涵盖了服务的整个生命周期
+Service-architecture.com将SOA定义为:
+本质上是服务的集合.服务间彼此通信,这种通信可能是简单的数据传送,也可能是两个或更多的服务协调进行某些
+活动.服务间需要某些方法进行连接
+所谓服务就是精确定义,封装完善,独立于其他服务所处环境和状态的函数
+SOA的几个关键特性:
+一种粗粒度,松耦合服务架构,服务之间通过简单,精确定义接口进行通讯,不涉及底层编程接口和通讯模型
+SOA与Web Service
+Web Service技术在几方面体现了SOA的需要:
+首先,是基于标准访问的独立功能实体满足了松耦合要求,在Web Service中所有的访问都通过SOAP访问进行,用WSDL
+定义的接口封装,通过UDDI进行目录查找,可以动态改变一个服务的提供方而无需影响客户端配置,外界客户端是根本
+不需要关心访问服务器端的实现
+其次,是和大数据量低频率访问符合服务大颗粒度功能:基于性能和效率平衡的要求,SOA的服务提供的是大颗粒度的
+应用功能,而且跨系统边界的访问频率也不会像程序间函数调用那么频繁.通过使用WSDL和基于文本(Literal)的SOAP
+请求,可以实现能一次性接受处理大量数据
+最后,基于标准的文本消息传递给异构系统提供通讯机制:Web Service所有的通讯是通过SOAP进行的,而SOAP是基于XML
+的,XML是结构化的文本消息.从最早的EDI开始,文本消息也许是异构系统间通讯组好的消息格式,是用于SOA强调的服务
+对异构后天宿主系统的透明性
+Web Service详细的描述
+Web Service是一个平台独立的,低耦合的,自包含的基于自编程的web的应用程序,可使用开放的XML(标准通用标记语言下的
+一个子集)标准来描述,发布,发现协调和配置这些应用程序,用于开发分布式的互操作的应用程序
+
+SOAP
+Simple Object Access Protocol,简单对象访问协议,SOAP
+SOAP是基于XML在分散或分布式的环境中交换信息的简单的协议.允许服务提供者和服务客户经过防火墙在INTERNET进行通讯
+交互
+SOAP的设计时为了在一个松散的,分布的环境中使用XML对等地交换结构化的和类型化的信息提供了一个简单且轻量级的机制
+XML是可以扩展标记语言
+当SOAP的\消息真正需要在网络上世纪传输的时候,SOAP消息能够与不同的底层传输协议进行绑定,同时,SOAP消息
+可以在很多消息传输模式中使用.包括超文本传输协议(HTTP),简单邮件传输协议(SMTP),多用途网际邮件扩充
+协议(MIME).还支持从消息系统到远程过程调用协议(RPC)等大量的应用程序
+最多的情况是绑定在HTTP协议上面传输.但SOAP并不是HTTP+XML,也不是HTTP post请求的一个专用版本
+WSDL
+Web Service Description Language,网络服务描述语言,WSDL,基于XML的语言,用于描述Web Service以及
+如何对他们进行访问
+WSDL文档主要使用以下几个元素来描述某个WebService:
+<portType> web service执行的操作
+<message> web service使用的消息
+<types> web service使用的数据类型
+<binding> web service使用的通信协议
+WSDL端口 <portType>元素是最重要的WSDL元素.可描述一个webservice,可被执行的操作,以及相关的消息.
+可以把<portType>元素比作传统编程语言中的一个函数库(或一个模块,或一个类)
+WSDL消息 <message>元素定义一个操作的数据元素
+每个消息均有一个或多个部件组成.可以把这些部件比作传统编程语言中一个函数调用的参数
+WSDL types <types>元素定义webservice使用的数据类型
+为了最大程度的平台中立性,WSDL使用XML Schema语言来定义数据类型
+WSDL Bindings <binding>元素为每个端口定义消息格式和协议细节
+对与接口来说,接口文档非常重要,它描述如何访问接口.那么WSDL就可以看做WebService接口的一种标准格式的"文档"
+
+UDDI
+Universal Description,Discovery and Integration ,可译为"通用描述,发现与集成服务",简称UDDI
+WSDL用来描述访问特定的Web Service的一些相关信息,那么在互联网上,或者是在企业的不同部门之间,如何来发现
+我们所需要的WebService?而WebService提供商又如何将自己开发的WebService公布到因特网上呢?需要UDDI
+UDDI是一个独立于平台的框架,通过使用Internet来描述服务,发现企业,并对企业服务进行集成
+UDDI指的是通过描述,发现与集成服务
+UDDI是一种用于存储有关WebServices的信息的目录
+UDDI是一种有WSDL描述的WebServices界面的目录
+UDDI经由SOAP进行通信
+UDDI被构建入了微软的.NET平台
+UDDI可以帮助Web服务提供商在互联网上发布WebService的信息.UDDI是一种目录服务,企业可以通过UDDI来注册和
+搜索WebServices
+SOAP,WSDL和UDDI构成了WebService的三要素
+
+WebServices体系结构
+在WebServices的体系结构中涉及到三个角色,一个是WebServices提供者,一个是WebService中介,还有一个是
+WebService请求者;同时还涉及到三类动作,即发布,查找,绑定
+WebService提供者:
+可以发布WebService,并且对使用自身服务的请求进行响应,WebService的拥有者,它会等待其他的服务或者是
+应用程序访问自己
+WebService请求者:
+也就是WebService功能的使用者,它通过服务注册中心也就是WebService中介者查找到所需要的服务,再利用SOAP
+消息向WebService提供者发布请求以获得服务
+WebService中介:
+也成为服务代理,用来注册已发布的WebService提供者,并对其进行分类,同时提供搜索服务,简单来说的话,WebService
+中介者的作用就是把一个WebService请求者和合适的WebService提供者联系在一起,充当一个管理者的角色,
+一般通过UDDI来实现
+发布:通过发布操作,可以使WebService提供者向WebService中介注册自己的功能以及访问的接口.
+发现(查找):使得WebService请求者可以通过WebService中介者来查找到特定种类的WebService接口.
+绑定:这里就是实现让WebService请求者能够使用WebService提供者提供的接口
+
+WebService与HTTP的不同:
+1.接口中实现的方法和要求参数一目了然
+2.不用担心大小写的问题
+3.不用担心中文urlencode问题
+4.代码中不用多次声明认证(账号,密码)参数
+5,传递参数可以为数组,对象等
+WebService可以被HTTP替代
+
+12.2 WebService开发与调用
+开发WebService接口并非python语言所擅长的,而且开发处理的WebService接口的性能也不敢恭维
+    12.2.1 suds-jurko调用接口
+    pip安装pip install suds_jurko
+    Webservice接口的调用,webxml.com.cn提供了一些发布的WebService接口
+
+    12.2.2 spyne开发接口
+    pip安装pip install spyne
+    开发一个简但的WebService接口
+    soap_server.py
+    开发了一个say_hello()的接口,需要两个参数name和times,接口会对name返回一定次数(times)的"hello, name")
+    启动WebService服务
